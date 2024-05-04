@@ -18,11 +18,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (response.ok) {
                 alert("Proveedor Registrado Correctamente")
-                window.location.href = "/add-proveedor";
+
             } else {
                 alert("Error Bro");
-                window.location.href = "/add-proveedor";
             }
+
+            document.getElementById("nombre").value = "";
+            document.getElementById("tipo").value = "";
+            document.getElementById("usuario").value = "";
+            document.getElementById("clave").value = "";
+
         } catch (error) {
             console.error("Error:", error);
         }

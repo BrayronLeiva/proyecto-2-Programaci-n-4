@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class ProveedorController {
@@ -30,6 +32,19 @@ public class ProveedorController {
 
         return "add-proveedor";
     }
+
+    @GetMapping("/proveedores/getProveedores")
+    public ResponseEntity<List<Proveedores>> getProveedores(Model model) {
+        try {
+            List<Proveedores> proveedores = proveedorService.findAllProveedores(); // Suponiendo que tienes un método en tu servicio para obtener todos los proveedores
+            System.out.println(proveedores.size());
+            return ResponseEntity.ok().body(proveedores);
+        } catch (Exception e) {
+            // Manejo de errores
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
     /*@GetMapping("/editar/{id}")
     public String mostrarFormularioDeEdicion(@PathVariable("id") int id, Model model) {
