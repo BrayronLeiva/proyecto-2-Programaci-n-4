@@ -1,0 +1,24 @@
+<header class="header">
+
+    <div class="contenedor contenedor--header">
+        <div class="barra">
+            <a class="logo" >
+                <h1 class="logo__nombre no-margin centrar-texto">Facturacion<span class="logo__bold">FB</span> </h1>
+            </a>
+
+            <nav class="navegacion">
+                <a href="/facturas/new" class="navegacion__enlace">FACTURAR</a>
+                <a href="/clientes/new" class="navegacion__enlace">CLIENTES</a>
+                <a href="/productos/new" class="navegacion__enlace">PRODUCTOS</a>
+                <a href="/facturas" class="navegacion__enlace">FACTURAS</a>
+                <a href="/about" class="navegacion__enlace">ACERCA DE</a>
+                <a href="/logOut" class="navegacion__enlace">CERRAR SESION</a>
+                <a th:href="@{/editar}" th:if="${session.usuario!=null}" th:text="${session.usuario.toUpperCase()}" class="navegacion__enlace" ></a>
+            </nav>
+
+
+        </div>
+
+    </div>
+
+</header>

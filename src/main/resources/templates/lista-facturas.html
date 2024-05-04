@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Facturas</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div class="contenedor contenido-principal">
+    <h1>Lista de Facturas</h1>
+    <table th:if="${not #lists.isEmpty(facturas)}">
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Acciones</th>
+        </tr>
+        <tr th:each="factura : ${facturas}">
+            <td th:text="${factura.idFactura}"></td>
+            <td th:text="${factura.clientesByIdCliente.nombre}"></td>
+            <td th:text="${factura.monto}"></td>
+            <td>
+                <a class="boton--primario boton" th:href="@{/factura/{id}/descargarPDF(id=${factura.idFactura})}">Descargar PDF</a>
+                <a class="boton--primario boton" th:href="@{/factura/{id}/descargarXML(id=${factura.idFactura})}">Descargar XML</a>
+            </td>
+        </tr>
+    </table>
+    <p th:if="${#lists.isEmpty(facturas)}">No hay facturas disponibles.</p>
+</div>
+
+</body>
+</html>

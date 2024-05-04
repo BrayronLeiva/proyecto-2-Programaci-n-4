@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Proveedor</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+
+<header class="header">
+
+    <div class="contenedor contenedor--header">
+        <div class="barra">
+            <a class="logo" >
+                <h1 class="logo__nombre no-margin centrar-texto">Facturacion<span class="logo__bold">FB</span> </h1>
+            </a>
+
+            <nav class="navegacion">
+                <a href="/proveedores/new" class="navegacion__enlace">REGISTRARSE</a>
+                <a href="../static/index.html" class="navegacion__enlace">INICIAR SESION</a>
+                <a href="../static/about.html" class="navegacion__enlace">ACERCA DE</a>
+            </nav>
+
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<div class="contenedor contenido-principal">
+
+    <h2>Registrar un nuevo Proveedor</h2>
+
+    <form th:action="@{/proveedores/add}" th:object="${proveedor}" method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" th:field="*{nombre}"/><br>
+
+        <label for="tipo">Tipo:</label>
+        <select class="boton boton--primario" id="tipo" name="tipo" th:field="*{tipo}" required>
+            <option value="Bienes">Bienes</option>
+            <option value="Servicios">Servicios</option>
+        </select><br>
+
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" name="usuario" th:field="*{usuario}"/><br>
+
+        <label for="clave">Clave:</label>
+        <input type="password" id="clave" name="clave" th:field="*{clave}"/><br>
+
+        <input type="submit" class="boton boton--primario" value="Registrar"/>
+    </form>
+    <!--
+
+-->
+
+</div>
+
+
+
+
+</body>
+</html>

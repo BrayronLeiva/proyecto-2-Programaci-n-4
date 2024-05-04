@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Factura</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <!-- Incluye aquí tu CSS para estilos, si es necesario -->
+
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="contenedor contenido-principal">
+    <br></br>
+    <h3>Facturacion</h3>
+    <div class="divFlex">
+        <div class="divForms">
+            <form class="formsUgly" th:action="@{/facturas/add_Item}" method="post">
+                <label for="productoId">ID del Producto:</label>
+                <input type="number" id="productoId" name="productoByIdProducto" min="1" required>
+                <br><br>
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" id="cantidad" name="cantidad" min="1" required>
+                <br><br>
+                <input type="submit" class="boton boton--primario" value="Registrar Item"/>
+            </form>
+            <a href="/productos/new" class="boton--primario boton ">Buscar</a>
+        </div>
+
+        <div class="divForms">
+            <form class="formsUgly" th:action="@{/buscarCliente}" method="post">
+                <div>
+                    <label for="clienteId">ID del Cliente:</label>
+                    <input type="number" id="clienteId" name="clienteID" min="1" required>
+                </div>
+                <input type="submit" class="boton boton--primario" value="Agregar"/>
+            </form>
+            <a href="/clientes/new" class="boton--primario boton ">Buscar</a>
+            <h4 id="clienteNom" th:text="'Cliente: ' + ${session.clienteFactura.getNombre()}"></h4>
+        </div>
+
+        <div class="divForms">
+            <form class="formsUgly" th:action="@{/facturas/add}" th:object="${factura}" method="post">
+                <input type="submit" class="boton boton--primario" value="Registrar Factura"/>
+            </form>
+        </div>
+    </div>
+
+    <table th:if="${not #lists.isEmpty(listaDetalles)}">
+        <h3>LISTA DE PRODUCTOS</h3>
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>ID</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="detalle, iterStat : ${listaDetalles}">
+            <td th:text="${detalle.producto.nombre}"></td>
+            <td th:text="${detalle.producto.idProducto}"></td>
+            <td th:text="${detalle.producto.valor * detalle.cantidad}"></td>
+            <td th:text="${detalle.cantidad}"></td>
+            <td class="divFlex">
+                <form class="formsUgly" th:action="@{/aumentarCantidad}" method="post">
+                    <input type="hidden" name="index" th:value="${iterStat.index}"/>
+                    <button class="boton boton--secundario" type="submit">+</button>
+                </form>
+                <form class="formsUgly" th:action="@{/disminuirCantidad}" method="post">
+                    <input type="hidden" name="index" th:value="${iterStat.index}"/>
+                    <button class="boton boton--terciario" type="submit">-</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+</body>
+</html>
+
+
+<!-- Comentarios agregados
+<div th:each="detalle, detalleStat : *{detalleFacturaByIdFactura}">
+    <div>
+        <label th:text="'Producto ' + ${detalleStat.index + 1}"></label>
+        <select name="detalleFacturaByIdFactura[__${detalleStat.index}__].productoByIdProducto" >
+            <option value="">Seleccione un Producto</option>
+
+            <option th:each="producto : ${productos}"
+                    th:value="${producto.idProducto}"
+                    th:text="${producto.nombre}"></option>
+        </select>
+    </div>
+    <div>
+        <label th:text="'Cantidad ' + ${detalleStat.index + 1}"></label>
+        <input type="number" name="factura.detalleFacturaByIdFactura[__${detalleStat.index}__].cantidad" />
+    </div>
+</div>
+
+
+-->

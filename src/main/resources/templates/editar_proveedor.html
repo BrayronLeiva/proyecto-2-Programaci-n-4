@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Proveedor</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+<div class="contenedor contenido-principal">
+
+<h2>Editar Proveedor</h2>
+
+<form th:action="@{/proveedores/actualizar/{id}(id=${proveedor.idProveedor})}" th:object="${proveedor}" method="post">
+    <input type="hidden" th:field="*{idProveedor}"/>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" th:field="*{nombre}" required/><br/>
+
+    <label for="clave">Clave:</label>
+    <input type="text" id="clave" th:field="*{clave}" required/><br/>
+
+    <label for="tipo">Tipo:</label>
+    <select class="boton boton--primario" id="tipo" name="tipo" th:field="*{tipo}" required>
+        <option value="Bienes">Bienes</option>
+        <option value="Servicios">Servicios</option>
+    </select><br>
+
+    <label for="usuario">Usuario:</label>
+    <input type="text" id="usuario" th:field="*{usuario}" required/><br/>
+
+    <input class="boton boton--primario" type="submit" value="Actualizar"/>
+</form>
+</div>
+
+
+</body>
+</html>

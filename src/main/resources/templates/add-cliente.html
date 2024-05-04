@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Cliente</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="contenedor contenido-principal">
+
+    <h2>Registrar un nuevo Cliente</h2>
+    <form th:action="@{/clientes/add}" th:object="${cliente}" method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" th:field="*{nombre}"/><br/>
+
+        <!-- <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" name="usuario" th:field="*{usuario}"/><br/>
+
+        <label for="clave">Clave:</label>
+        <input type="password" id="clave" name="clave" th:field="*{clave}"/><br/> -->
+
+        <input type="submit" class="boton boton--primario" value="Registrar"/>
+    </form>
+
+    <table th:if="${not #lists.isEmpty(clientes)}">
+        <h2>Lista de Clientes</h2>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <!-- <th>Usuario</th>
+             <th>Clave</th> -->
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cliente : ${clientes}">
+            <td th:text="${cliente.idCliente}"></td>
+            <td th:text="${cliente.nombre}"></td>
+            <!--<td th:text="${cliente.usuario}"></td>
+            <td th:text="${cliente.clave}"></td> -->
+            <td>
+                <form th:class="formsUgly" th:action="@{/buscarCliente}" method="post">
+                    <input type="hidden" name="clienteID" th:value="${cliente.idCliente}" />
+                    <button type="submit" class="boton--primario boton" >ADD</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p th:if="${#lists.isEmpty(clientes)}">No hay clientes disponibles.</p>
+
+</div>
+
+
+
+</body>
+</html>
