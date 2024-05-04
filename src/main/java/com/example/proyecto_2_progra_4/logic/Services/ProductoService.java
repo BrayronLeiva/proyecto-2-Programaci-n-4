@@ -1,9 +1,9 @@
 package com.example.proyecto_2_progra_4.logic.Services;
 
 
-import com.example.proyecto_2_progra_4.logic.Productos;
+import com.example.proyecto_2_progra_4.logic.Entities.Productos;
 import com.example.proyecto_2_progra_4.data.ProductoRepository;
-import com.example.proyecto_2_progra_4.logic.Proveedores;
+import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

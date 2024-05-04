@@ -1,7 +1,7 @@
 package com.example.proyecto_2_progra_4.logic.Services;
 
 import com.example.proyecto_2_progra_4.data.DetalleFacturaRepository;
-import com.example.proyecto_2_progra_4.logic.Detalle_Factura;
+import com.example.proyecto_2_progra_4.logic.Entities.Detalle_Factura;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

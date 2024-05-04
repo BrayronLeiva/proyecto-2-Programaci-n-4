@@ -1,6 +1,6 @@
 package com.example.proyecto_2_progra_4.presentation.Controllers;
 
-import com.example.proyecto_2_progra_4.logic.Proveedores;
+import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
 import com.example.proyecto_2_progra_4.logic.Services.ClienteService;
 import com.example.proyecto_2_progra_4.logic.Services.ProveedorService;
 import jakarta.servlet.http.HttpSession;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Objects;
 
 
@@ -38,7 +39,7 @@ public class MainController {
 
             if(Objects.equals(username, "admin") && Objects.equals(password, "admin")){
                 //enviar a section de administrador
-                return ResponseEntity.ok().build();
+                return ResponseEntity.ok().body(Collections.singletonMap("admin", true));
             }
 
             if(proveedorService.validarCredenciales(username, password) && proveedor.isEstado()){
@@ -46,7 +47,7 @@ public class MainController {
                 // Almacenar el ID del proveedor en la sesión
                 session.setAttribute("proveedor", proveedor);
                 session.setAttribute("usuario", proveedor.getUsuario());
-                return ResponseEntity.ok().build();
+                return ResponseEntity.ok().body(Collections.singletonMap("admin", false));
 
             } else {
                 // Credenciales incorrectas o proveedor inactivo

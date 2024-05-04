@@ -2,9 +2,8 @@ package com.example.proyecto_2_progra_4.presentation.Controllers;
 
 
 
-import com.example.proyecto_2_progra_4.logic.Clientes;
-import com.example.proyecto_2_progra_4.logic.Productos;
-import com.example.proyecto_2_progra_4.logic.Proveedores;
+import com.example.proyecto_2_progra_4.logic.Entities.Clientes;
+import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
 import com.example.proyecto_2_progra_4.logic.Services.ClienteService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;

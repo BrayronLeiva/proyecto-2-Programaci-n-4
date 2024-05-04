@@ -2,9 +2,9 @@ package com.example.proyecto_2_progra_4.logic.Services;
 
 
 
-import com.example.proyecto_2_progra_4.logic.Clientes;
+import com.example.proyecto_2_progra_4.logic.Entities.Clientes;
 import com.example.proyecto_2_progra_4.data.ClienteRepository;
-import com.example.proyecto_2_progra_4.logic.Proveedores;
+import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.example.proyecto_2_progra_4.presentation.Controllers;
 
 
-import com.example.proyecto_2_progra_4.logic.*;
+import com.example.proyecto_2_progra_4.logic.Entities.*;
 import com.example.proyecto_2_progra_4.logic.Services.*;
 
 import jakarta.servlet.http.HttpServletResponse;

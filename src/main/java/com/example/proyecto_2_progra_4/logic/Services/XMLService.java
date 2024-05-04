@@ -1,6 +1,6 @@
 package com.example.proyecto_2_progra_4.logic.Services;
 
-import com.example.proyecto_2_progra_4.logic.Facturas;
+import com.example.proyecto_2_progra_4.logic.Entities.Facturas;
 
 import org.jdom2.Document;
 import org.jdom2.Element;

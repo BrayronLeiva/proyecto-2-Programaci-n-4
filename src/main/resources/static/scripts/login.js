@@ -15,7 +15,14 @@ document.addEventListener("DOMContentLoaded", function() {
             }); //fin de peticion
 
             if (response.ok) {
-                window.location.href = "/index.html"; // Redireccionar al dashboard después del inicio de sesión exitoso
+                const data = await response.json();
+                if (data.admin) {
+                    // Si el usuario es administrador, redirigir a la sección de administrador
+                    window.location.href = "/admin.html";
+                } else {
+                    // Si el usuario es normal, redirigir al dashboard normal
+                    window.location.href = "/registrar-factura.html";
+                }
             } else {
                 alert("Usuario o contraseña incorrectos");
             }

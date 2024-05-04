@@ -1,4 +1,4 @@
-package com.example.proyecto_2_progra_4.logic;
+package com.example.proyecto_2_progra_4.logic.Entities;
 
 import jakarta.persistence.*;
 

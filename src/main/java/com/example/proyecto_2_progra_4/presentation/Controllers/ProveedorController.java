@@ -2,20 +2,20 @@ package com.example.proyecto_2_progra_4.presentation.Controllers;
 
 
 
-import com.example.proyecto_2_progra_4.logic.Proveedores;
+import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
 
 
 import com.example.proyecto_2_progra_4.logic.Services.ProveedorService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
-import java.util.List;
-
-@Controller
+@RestController
+@RequestMapping("/api")
 public class ProveedorController {
 
     @Autowired
@@ -47,14 +47,35 @@ public class ProveedorController {
         return "editar_proveedor";
     }
 
+    @PostMapping("/proveedor/add")
+    public ResponseEntity<?> addProveedor(@RequestBody Proveedores proveedor) {
 
-    @PostMapping("/proveedores/add")
-    public String addProveedor(Proveedores proveedor, Model model) {
+        System.out.println(proveedor.toString());
+
+        System.out.println("CALLENDO EN EL AGREGAR PROVEEDOR");
+        try {
+            proveedor.setEstado(false);
+            proveedorService.saveProveedor(proveedor);
+            // Redirige para evitar duplicación del envío del formulario y para actualizar la lista de proveedores
+            return ResponseEntity.ok().build();
+
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocurrió un error. Por favor, inténtalo de nuevo más tarde.");
+        }
+    }
+
+
+    @PostMapping("/proveedores/add2")
+    public String addProveedor2(Proveedores proveedor, Model model) {
         proveedor.setEstado(false);
         proveedorService.saveProveedor(proveedor);
         // Redirige para evitar duplicación del envío del formulario y para actualizar la lista de proveedores
         return "redirect:/proveedores/new";
     }
+
+
 
     @PostMapping("/proveedores/actualizar/{id}")
     public String actualizarProveedor(@PathVariable("id") long id, @ModelAttribute("proveedor") Proveedores proveedor, Model model) {

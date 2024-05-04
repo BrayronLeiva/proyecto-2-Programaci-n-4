@@ -1,4 +1,4 @@
-package com.example.proyecto_2_progra_4.logic;
+package com.example.proyecto_2_progra_4.logic.Entities;
 
 import jakarta.persistence.*;
 
@@ -112,5 +112,20 @@ public class Proveedores {
 
     public void setProductosByIdProveedor(Collection<Productos> productosByIdProveedor) {
         this.productosByIdProveedor = productosByIdProveedor;
+    }
+
+    @Override
+    public String toString() {
+        return "Proveedores{" +
+                "idProveedor=" + idProveedor +
+                ", tipo='" + tipo + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", usuario='" + usuario + '\'' +
+                ", clave='" + clave + '\'' +
+                ", estado=" + estado +
+                ", clientesByIdProveedor=" + clientesByIdProveedor +
+                ", facturasByIdProveedor=" + facturasByIdProveedor +
+                ", productosByIdProveedor=" + productosByIdProveedor +
+                '}';
     }
 }

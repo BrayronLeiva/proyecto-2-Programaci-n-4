@@ -1,7 +1,6 @@
-package com.example.proyecto_2_progra_4.logic;
+package com.example.proyecto_2_progra_4.logic.Entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.Collection;
 import java.util.Objects;

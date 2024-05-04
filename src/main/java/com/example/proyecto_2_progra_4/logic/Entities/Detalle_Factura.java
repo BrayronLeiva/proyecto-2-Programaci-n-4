@@ -1,11 +1,8 @@
-package com.example.proyecto_2_progra_4.logic;
+package com.example.proyecto_2_progra_4.logic.Entities;
 
 import jakarta.persistence.Entity;
 
 import jakarta.persistence.*;
-
-import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Table(name = "detalles_facturas")
