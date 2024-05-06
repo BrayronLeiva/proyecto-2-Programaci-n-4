@@ -2,9 +2,11 @@ package com.example.proyecto_2_progra_4.presentation.Controllers;
 
 
 
+import com.example.proyecto_2_progra_4.logic.DTOEntities.ProveedoresDTO;
 import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
 
 
+import com.example.proyecto_2_progra_4.logic.Services.DTOService;
 import com.example.proyecto_2_progra_4.logic.Services.ProveedorService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class ProveedorController {
 
     @Autowired
     private ProveedorService proveedorService;
+    @Autowired
+    private DTOService dtoService;
 
     @GetMapping("/proveedores/new")
     public String showSignUpForm(Model model) {
@@ -34,11 +38,11 @@ public class ProveedorController {
     }
 
     @GetMapping("/proveedores/getProveedores")
-    public ResponseEntity<List<Proveedores>> getProveedores(Model model) {
+    public ResponseEntity<List<ProveedoresDTO>> getProveedores() {
         try {
             List<Proveedores> proveedores = proveedorService.findAllProveedores(); // Suponiendo que tienes un método en tu servicio para obtener todos los proveedores
             System.out.println(proveedores.size());
-            return ResponseEntity.ok().body(proveedores);
+            return ResponseEntity.ok().body(dtoService.transformarDTO(proveedores));
         } catch (Exception e) {
             // Manejo de errores
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
