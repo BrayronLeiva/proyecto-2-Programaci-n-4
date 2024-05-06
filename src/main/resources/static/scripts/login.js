@@ -1,4 +1,4 @@
-// login.js
+
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("loginForm").addEventListener("submit", async function(event) {
         event.preventDefault();

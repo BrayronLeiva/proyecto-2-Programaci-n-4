@@ -64,7 +64,7 @@ function mostrarProveedoresEnTabla() {
             <td>${proveedor.estado}</td>
             <td class="divFlex">
                 <form class="formsUgly" method="post">
-                    <input type="hidden" name="idProveedor" value=${proveedor.idProveedor}/>
+                    <input type="hidden" name="idProveedor" value=${proveedor.idProveedor} />
                     <button class="boton boton--primario" type="submit">Activar</button>
                 </form>
                 <form class="formsUgly" method="post">
@@ -75,4 +75,80 @@ function mostrarProveedoresEnTabla() {
         `;
         tbody.appendChild(fila);
     });
+}
+
+// Agregar un evento de clic al tbody de la tabla
+document.addEventListener("DOMContentLoaded", function() {
+    const tabla = document.getElementById("tablaProveedores");
+    const tbody = tabla.querySelector("tbody");
+    tbody.addEventListener('click', function(event) {
+        const target = event.target;
+
+        // Verificar si el clic fue en un botón dentro de una fila
+        if (target.tagName.toLowerCase() === 'button') {
+            // Obtener el formulario padre del botón clicado
+            const form = target.closest('form');
+
+            // Obtener el idProveedor del input del formulario
+            const idProveedor = form.querySelector('input[name="idProveedor"]').value;
+
+            // Verificar si el botón fue de activar o desactivar
+            if (target.textContent === 'Activar') {
+                activarProveedor(idProveedor);
+                console.log('Activar proveedor con id:', idProveedor);
+            } else if (target.textContent === 'Desactivar') {
+
+                desactivarProveedor(idProveedor);
+                console.log('Desactivar proveedor con id:', idProveedor);
+            }
+
+            // Evitar el comportamiento por defecto del botón (enviar el formulario)
+            event.preventDefault();
+        }
+    });
+
+});
+
+async function desactivarProveedor(id) {
+    try {
+        console.log(id);
+        const response = await fetch(`${backend}/api/admin/desactivarProveedor/${id}`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            console.log("Proveedor desactivado correctamente\n");
+            obtenerProveedores();
+
+        } else {
+            console.error("Error al desactivar proveedor:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+async function activarProveedor(id) {
+    try {
+        console.log(id);
+        const response = await fetch(`${backend}/api/admin/activarProveedor/${id}`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            console.log("Proveedor activado correctamente\n");
+            obtenerProveedores();
+
+        } else {
+            console.error("Error al activar proveedor:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
 }
