@@ -10,6 +10,8 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,8 @@ import java.util.List;
 import java.io.ByteArrayOutputStream;
 
 
-@Controller
+@RestController
+@RequestMapping("/api")
 public class FacturaController {
 
     @Autowired
@@ -43,8 +46,6 @@ public class FacturaController {
     private XMLService xmlService = new XMLService();
     private PDFService pdfService = new PDFService();
 
-
-    //List<Productos> listaItems = new ArrayList<>(); //lista de los productos que se van a comprar
     List<Detalle_Factura> listaDetalleFactura = new ArrayList<>();
 
     @GetMapping("/facturas/new")
@@ -123,25 +124,9 @@ public class FacturaController {
             listaDetalleFactura.add(detalleFactura);
         }
 
-        //listaDetalleFactura.add();
-        //detalleFactura.setFactura(n);
-
-
-        //facturaService.saveFactura(factura);
         return "redirect:/facturas/new";
     }
 
-    /*@PostMapping("/aumentarCantidad")
-    public String aumentarProductoDetalle(Long detalleFactura,HttpSession session, Model model) {
-
-        for (Detalle_Factura indiceObj : listaDetalleFactura) {
-            if (Objects.equals(indiceObj.getId_detalle(), detalleFactura)) {
-                indiceObj.setCantidad(indiceObj.getCantidad() + 1);
-                break;
-            }
-        }
-        return "redirect:/facturas/new";
-    }*/
 
     @PostMapping("/aumentarCantidad")
     public String aumentarCantidad(@RequestParam("index") int index, HttpSession session) {
@@ -152,17 +137,6 @@ public class FacturaController {
         return "redirect:/facturas/new";
     }
 
-   /* @PostMapping("/disminuirCantidad")
-    public String disminuirProductoDetalle(Long detalleFactura,HttpSession session, Model model) {
-
-        for (Detalle_Factura indiceObj : listaDetalleFactura) {
-            if (Objects.equals(indiceObj.getId_detalle(), detalleFactura)) {
-                indiceObj.setCantidad(indiceObj.getCantidad() - 1);
-                break;
-            }
-        }
-        return "redirect:/facturas/new";
-    }*/
 
 
     @PostMapping("/disminuirCantidad")
@@ -189,12 +163,8 @@ public class FacturaController {
             model.addAttribute("facturas", listaFacturas);
         }
 
-        //NUNCA DEBERIA DE SER VACIO YA QUE ENTRO PERO DEBERIAMOS REVISAR EL ASUNTO
 
-        //model.addAttribute("clientes", clienteService.findAllClientes()); // Agrega la lista de clientes al modelo
-        //List<Facturas> facturas = facturaService.findAllFacturas();
-        //model.addAttribute("facturas", facturas);
-        return "lista-facturas"; // nombre del archivo HTML de Thymeleaf
+        return "lista-facturas";
     }
 
     @GetMapping("/factura/{id}/descargarPDF")
@@ -233,7 +203,28 @@ public class FacturaController {
         }
     }
 
+    @PostMapping("/facturas/selectCliente/{id}")
+    public ResponseEntity<?> seleccionarCliente(@PathVariable("id") long id, HttpSession session, Model model) {
+        try {
+            Clientes cliente = clienteService.findClienteById(Integer.parseInt(String.valueOf(id)));
+            if (cliente != null) {
+                session.setAttribute("clienteFactura", cliente);
+            } else {
+                Clientes c = new Clientes();
+                c.setUsuario("NULL");
+                session.setAttribute("clienteFactura", c); //tener cuidado al llamar este metodo por esta razon/ fixed
+            }
+            return ResponseEntity.ok().build();
 
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocurrió un error. Por favor, inténtalo de nuevo más tarde.");
+        }
+        //model.addAttribute("listaItems", listaItems);
+        //model.addAttribute("listaDetalles", listaDetalleFactura);
+
+    }
 
     @PostMapping("/buscarCliente")
     public String buscarCliente(@RequestParam("clienteID") int clienteID, HttpSession session, Model model) {

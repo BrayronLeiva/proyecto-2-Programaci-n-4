@@ -1,6 +1,8 @@
 package com.example.proyecto_2_progra_4.logic.Services;
 
+import com.example.proyecto_2_progra_4.logic.DTOEntities.ClientesDTO;
 import com.example.proyecto_2_progra_4.logic.DTOEntities.ProveedoresDTO;
+import com.example.proyecto_2_progra_4.logic.Entities.Clientes;
 import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,7 @@ import java.util.List;
 @Service
 public class DTOService {
 
-    public List<ProveedoresDTO> transformarDTO(List<Proveedores> list){
+    public List<ProveedoresDTO> transformarDTOProveedores(List<Proveedores> list){
         List<ProveedoresDTO> proveedpresDTO = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             Proveedores current = list.get(i);
@@ -19,5 +21,15 @@ public class DTOService {
         }
 
         return proveedpresDTO;
+    }
+
+    public List<ClientesDTO> transformarDTOClientes(List<Clientes> list){
+        List<ClientesDTO> clientesDTO = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Clientes current = list.get(i);
+            clientesDTO.add(new ClientesDTO(current.getIdCliente(), current.getNombre()));
+        }
+
+        return clientesDTO;
     }
 }

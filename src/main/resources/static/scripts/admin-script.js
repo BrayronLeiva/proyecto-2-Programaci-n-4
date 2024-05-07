@@ -49,19 +49,34 @@ obtenerProveedores();
 function mostrarProveedoresEnTabla() {
     const tabla = document.getElementById("tablaProveedores");
     const tbody = tabla.querySelector("tbody");
+    const titulo = document.getElementById("tituloTablaProveedores");
+    const empty = document.getElementById("emptyTablaProveedores");
 
     // Limpiar el contenido existente de la tabla
     tbody.innerHTML = "";
 
+    if(proveedores.length === 0){
+        tabla.style.display = "none";
+        titulo.style.display = "none";
+        empty.style.display = "block";
+    }
+    else{
+        tabla.style.display = "table";
+        titulo.style.display = "block";
+        empty.style.display = "none";
+    }
+
     // Iterar sobre la lista de proveedores y agregar filas a la tabla
     proveedores.forEach(proveedor => {
+        const estadoTexto = proveedor.estado ? "Habilitado" : "Inhabilitado";
         const fila = document.createElement("tr");
+
         fila.innerHTML = `
             <td>${proveedor.idProveedor}</td>
             <td>${proveedor.tipo}</td>
             <td>${proveedor.nombre}</td>
             <td>${proveedor.usuario}</td>
-            <td>${proveedor.estado}</td>
+            <td>${estadoTexto}</td>
             <td class="divFlex">
                 <form class="formsUgly" method="post">
                     <input type="hidden" name="idProveedor" value=${proveedor.idProveedor} />

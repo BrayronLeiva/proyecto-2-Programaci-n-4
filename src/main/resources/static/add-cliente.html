@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Cliente</title>
+    <link rel="stylesheet" href="../static/styles/styles.css">
+    <script src="scripts/add-cliente-script.js"></script>
+</head>
+<body>
+
+<header class="header">
+
+    <div class="contenedor contenedor--header">
+        <div class="barra">
+            <a class="logo" >
+                <h1 class="logo__nombre no-margin centrar-texto">Facturacion<span class="logo__bold">FB</span> </h1>
+            </a>
+
+            <nav class="navegacion">
+                <a href="registrar-factura.html" class="navegacion__enlace">FACTURAR</a>
+                <a href="add-cliente.html" class="navegacion__enlace">CLIENTES</a>
+                <a class="navegacion__enlace">PRODUCTOS</a>
+                <a class="navegacion__enlace">FACTURAS</a>
+                <a href="about.html" class="navegacion__enlace">ACERCA DE</a>
+                <a class="navegacion__enlace">CERRAR SESION</a>
+            </nav>
+
+
+        </div>
+
+    </div>
+
+</header>
+
+<div class="contenedor contenido-principal">
+
+    <h2>Registrar un nuevo Cliente</h2>
+    <form method="post" id="add-cliente">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre"/><br/>
+
+        <!-- <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" name="usuario" th:field="*{usuario}"/><br/>
+
+        <label for="clave">Clave:</label>
+        <input type="password" id="clave" name="clave" th:field="*{clave}"/><br/> -->
+
+        <input type="submit" class="boton boton--primario" value="Registrar"/>
+    </form>
+
+    <table id="tablaClientes">
+        <h2 id="tituloTablaClientes">Lista de Clientes</h2>
+        <h2 id="emptyTablaClientes">No hay clientes registrados</h2>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <!-- <th>Usuario</th>
+             <th>Clave</th> -->
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+</div>
+
+
+
+</body>
+</html>

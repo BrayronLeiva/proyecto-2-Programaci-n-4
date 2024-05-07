@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +41,7 @@ public class ProveedorController {
         try {
             List<Proveedores> proveedores = proveedorService.findAllProveedores(); // Suponiendo que tienes un método en tu servicio para obtener todos los proveedores
             System.out.println(proveedores.size());
-            return ResponseEntity.ok().body(dtoService.transformarDTO(proveedores));
+            return ResponseEntity.ok().body(dtoService.transformarDTOProveedores(proveedores));
         } catch (Exception e) {
             // Manejo de errores
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
