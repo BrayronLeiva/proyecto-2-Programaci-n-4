@@ -2,8 +2,10 @@ package com.example.proyecto_2_progra_4.logic.Services;
 
 import com.example.proyecto_2_progra_4.logic.DTOEntities.ClientesDTO;
 import com.example.proyecto_2_progra_4.logic.DTOEntities.ProveedoresDTO;
+import com.example.proyecto_2_progra_4.logic.DTOEntities.ProductosDTO;
 import com.example.proyecto_2_progra_4.logic.Entities.Clientes;
 import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
+import com.example.proyecto_2_progra_4.logic.Entities.Productos;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,5 +33,15 @@ public class DTOService {
         }
 
         return clientesDTO;
+    }
+
+    public List<ProductosDTO> transformarDTOProductos(List<Productos> list){
+        List<ProductosDTO> productosDTO = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Productos current = list.get(i);
+            productosDTO.add(new ProductosDTO(current.getIdProducto(), current.getNombre(),current.getValor()));
+        }
+
+        return productosDTO;
     }
 }
