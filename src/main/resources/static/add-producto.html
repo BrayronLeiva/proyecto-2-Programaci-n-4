@@ -17,9 +17,12 @@
             </a>
 
             <nav class="navegacion">
-                <a href="add-proveedor.html" class="navegacion__enlace">REGISTRARSE</a>
-                <a href="index.html" class="navegacion__enlace">INICIAR SESION</a>
+                <a href="registrar-factura.html" class="navegacion__enlace">FACTURAR</a>
+                <a href="add-cliente.html" class="navegacion__enlace">CLIENTES</a>
+                <a class="navegacion__enlace">PRODUCTOS</a>
+                <a class="navegacion__enlace">FACTURAS</a>
                 <a href="about.html" class="navegacion__enlace">ACERCA DE</a>
+                <a class="navegacion__enlace">CERRAR SESION</a>
             </nav>
 
 
@@ -50,6 +53,23 @@
         <input type="submit" class="boton boton--primario" value="Registrar"/>
 
     </form>
+
+    <table id="tablaProductos">
+        <h2 id="tituloTablaProductos">Listado de Productos</h2>
+        <h2 id="emptyTablaProductos">No hay productos registrados</h2>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Valor</th>
+            <th></th>
+            <!-- Añadir más columnas según sea necesario -->
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
 
 </div>
 

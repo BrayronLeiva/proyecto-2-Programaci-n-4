@@ -2,20 +2,22 @@ package com.example.proyecto_2_progra_4.presentation.Controllers;
 
 
 
+import com.example.proyecto_2_progra_4.logic.DTOEntities.ProductosDTO;
+import com.example.proyecto_2_progra_4.logic.DTOEntities.ProveedoresDTO;
 import com.example.proyecto_2_progra_4.logic.Entities.Productos;
 
 import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
 import com.example.proyecto_2_progra_4.logic.Services.ClienteService;
+import com.example.proyecto_2_progra_4.logic.Services.DTOService;
 import com.example.proyecto_2_progra_4.logic.Services.ProductoService;
 import com.example.proyecto_2_progra_4.logic.Services.ProveedorService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,6 +31,8 @@ public class ProductoController {
     private ProveedorService proveedorService;
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private DTOService dtoService;
 
     @GetMapping("/productos/new")
     public String showSignUpForm(Model model, HttpSession session) {
@@ -49,10 +53,33 @@ public class ProductoController {
     }
 
     @PostMapping("/productos/add")
-    public String addProducto(Productos producto, Model model, HttpSession session) {
+    public ResponseEntity<?> addProducto(@RequestBody Productos producto, HttpSession session) {
+        try {
+            producto.setProveedoresByIdProveedor((Proveedores) session.getAttribute("proveedor"));
+            productoService.saveProducto(producto);
+            return ResponseEntity.ok().build();
 
-        producto.setProveedoresByIdProveedor((Proveedores) session.getAttribute("proveedor"));
-        productoService.saveProducto(producto);
-        return "redirect:/productos/new";
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocurrió un error. Por favor, inténtalo de nuevo más tarde.");
+        }
     }
+
+    @GetMapping("/productos/getProductos")
+    public ResponseEntity<List<ProductosDTO>> getProveedores(HttpSession session) {
+        try {
+            String usuarioLogeado = (String) session.getAttribute("usuario");
+            //Verificar si hay un usuario logeado
+            List<Productos> listaProductos = productoService.findProductosByProveedorActual(usuarioLogeado);
+
+
+            return ResponseEntity.ok().body(dtoService.transformarDTOProductos(listaProductos));
+        } catch (Exception e) {
+            // Manejo de errores
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
 }

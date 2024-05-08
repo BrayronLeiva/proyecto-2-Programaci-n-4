@@ -8,15 +8,15 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("add-producto").addEventListener("submit", async function(event) {
         event.preventDefault();
         const nombre = document.getElementById("nombre").value;
-
+        const valor = document.getElementById("valor").value;
 
         try {
-            const response = await fetch("/api/producto/add", {
+            const response = await fetch("/api/productos/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json" // Ajustar el Content-Type
                 },
-                body: JSON.stringify({nombre})
+                body: JSON.stringify({nombre, valor})
             }); //fin de peticion
 
             if (response.ok) {
@@ -88,6 +88,7 @@ function mostrarProductosEnTabla() {
         fila.innerHTML = `
             <td>${producto.idProducto}</td>
             <td>${producto.nombre}</td>
+            <td>${producto.valor}</td>
             <td class="divFlex">
                  <form class="formsUgly" method="post">
                     <input type="hidden" name="idProducto" value=${producto.idProducto} />

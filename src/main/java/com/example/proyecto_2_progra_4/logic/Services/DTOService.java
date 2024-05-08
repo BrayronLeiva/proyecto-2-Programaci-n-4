@@ -16,8 +16,7 @@ public class DTOService {
 
     public List<ProveedoresDTO> transformarDTOProveedores(List<Proveedores> list){
         List<ProveedoresDTO> proveedpresDTO = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            Proveedores current = list.get(i);
+        for (Proveedores current : list) {
             proveedpresDTO.add(new ProveedoresDTO(current.getIdProveedor(), current.getTipo(), current.getNombre(),
                     current.getUsuario(), current.isEstado()));
         }
@@ -27,8 +26,7 @@ public class DTOService {
 
     public List<ClientesDTO> transformarDTOClientes(List<Clientes> list){
         List<ClientesDTO> clientesDTO = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            Clientes current = list.get(i);
+        for (Clientes current : list) {
             clientesDTO.add(new ClientesDTO(current.getIdCliente(), current.getNombre()));
         }
 
@@ -37,9 +35,8 @@ public class DTOService {
 
     public List<ProductosDTO> transformarDTOProductos(List<Productos> list){
         List<ProductosDTO> productosDTO = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            Productos current = list.get(i);
-            productosDTO.add(new ProductosDTO(current.getIdProducto(), current.getNombre(),current.getValor()));
+        for (Productos current : list) {
+            productosDTO.add(new ProductosDTO(current.getIdProducto(), current.getNombre(), current.getValor()));
         }
 
         return productosDTO;
