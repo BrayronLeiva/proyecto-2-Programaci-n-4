@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Producto</title>
+    <link rel="stylesheet" href="../static/styles/styles.css">
+    <script src="scripts/add-producto-script.js"></script>
+</head>
+<body>
+
+<header class="header">
+
+    <div class="contenedor contenedor--header">
+        <div class="barra">
+            <a class="logo" >
+                <h1 class="logo__nombre no-margin centrar-texto">Facturacion<span class="logo__bold">FB</span> </h1>
+            </a>
+
+            <nav class="navegacion">
+                <a href="add-proveedor.html" class="navegacion__enlace">REGISTRARSE</a>
+                <a href="index.html" class="navegacion__enlace">INICIAR SESION</a>
+                <a href="about.html" class="navegacion__enlace">ACERCA DE</a>
+            </nav>
+
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<div class="contenedor contenido-principal">
+
+    <h2>Registrar un nuevo Producto</h2>
+
+    <form id="add-producto" method="post">
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" /><br>
+
+
+
+        <label for="valor">Valor:</label>
+        <input type="text" id="valor" name="valor" /><br>
+
+
+
+        <input type="submit" class="boton boton--primario" value="Registrar"/>
+
+    </form>
+
+</div>
+
+
+</body>
+</html>
