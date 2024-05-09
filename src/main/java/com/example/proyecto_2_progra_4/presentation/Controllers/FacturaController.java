@@ -1,6 +1,8 @@
 package com.example.proyecto_2_progra_4.presentation.Controllers;
 
 
+import com.example.proyecto_2_progra_4.logic.DTOEntities.Detalle_FacturaDTO;
+import com.example.proyecto_2_progra_4.logic.DTOEntities.ProveedoresDTO;
 import com.example.proyecto_2_progra_4.logic.Entities.*;
 import com.example.proyecto_2_progra_4.logic.Services.*;
 
@@ -43,6 +45,8 @@ public class FacturaController {
     @Autowired
     private DetalleFacturaService detalleFacturaService;
 
+    @Autowired
+    private DTOService dtoService;
     private XMLService xmlService = new XMLService();
     private PDFService pdfService = new PDFService();
 
@@ -111,20 +115,42 @@ public class FacturaController {
     }
 
 
-    @PostMapping("/facturas/add_Item")
-    public String registrarDetalleFactura(@ModelAttribute("productoByIdProducto") Productos producto, @RequestParam("cantidad") int cantidad, Model model) {
-        if(producto.getNombre()!=null) {
-            System.out.println("--------------: " + producto.getNombre());
-            System.out.println("--------------:" + cantidad);
-            Detalle_Factura detalleFactura = new Detalle_Factura();
-            detalleFactura.setCantidad(cantidad);
-            detalleFactura.setProducto(producto);
-            detalleFactura.setPrecioUnitario(10.0);
-            //listaItems.add(producto);
-            listaDetalleFactura.add(detalleFactura);
+    @PostMapping("/facturas/addItem/{productoId}/{cantidad}")
+    public ResponseEntity<?> registrarDetalleFactura(@PathVariable Long productoId, @PathVariable int cantidad) {
+        try {
+            Productos producto = productoService.findById(Math.toIntExact(productoId));
+            if (producto.getNombre() != null) {
+                System.out.println("--------------: " + producto.getNombre());
+                System.out.println("--------------:" + cantidad);
+                Detalle_Factura detalleFactura = new Detalle_Factura();
+                detalleFactura.setCantidad(cantidad);
+                detalleFactura.setProducto(producto);
+                detalleFactura.setPrecioUnitario(10.0);
+                //listaItems.add(producto);
+                listaDetalleFactura.add(detalleFactura);
+                return ResponseEntity.ok().build();
+            }
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocurrió un error. Por favor, inténtalo de nuevo más tarde.");
         }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Codigo de producto no valido");
 
-        return "redirect:/facturas/new";
+    }
+
+    @GetMapping("/facturas/getCarrito")
+    public ResponseEntity<List<Detalle_FacturaDTO>> getCarrito() {
+        System.out.println("Estoy mandando el carrito");
+        try {
+            List<Detalle_FacturaDTO> carrito = dtoService.transformarDTOdetallesFactura(listaDetalleFactura); // Suponiendo que tienes un método en tu servicio para obtener todos los proveedores
+            System.out.println(carrito.size());
+            return ResponseEntity.ok().body(carrito);
+        } catch (Exception e) {
+            // Manejo de errores
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
 
@@ -165,42 +191,6 @@ public class FacturaController {
 
 
         return "lista-facturas";
-    }
-
-    @GetMapping("/factura/{id}/descargarPDF")
-    public void descargarPdf(@PathVariable Long id, HttpServletResponse response) {
-        try {
-            Facturas factura = facturaService.findFacturaById(id); // Línea completada aquí
-            ByteArrayOutputStream baos = pdfService.generarPdf(factura);
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=factura-" + id + ".pdf");
-            response.getOutputStream().write(baos.toByteArray());
-        } catch (IOException e) {
-            System.err.println("Error al enviar PDF: " + e.getMessage());
-        }
-    }
-
-
-
-    @GetMapping("/factura/{id}/descargarXML")
-    public void generarXml(@PathVariable Long id, HttpServletResponse response) throws IOException {
-        // Generar el documento XML
-        Facturas factura = facturaService.findFacturaById(id);
-        org.jdom2.Document xmlDocument = xmlService.generarDocumentoXML(factura);
-
-        // Establecer el tipo de contenido de la respuesta
-        response.setContentType("application/xml");
-        response.setCharacterEncoding("UTF-8");
-
-        // Establecer el encabezado Content-Disposition para indicar que el archivo debe descargarse
-        response.setHeader("Content-Disposition", "attachment; filename=facturas.xml");
-
-        // Obtener el flujo de salida de la respuesta
-        try (OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream(), "UTF-8")) {
-            // Escribir el documento XML en el flujo de salida
-            XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-            xmlOutputter.output(xmlDocument, out);
-        }
     }
 
     @PostMapping("/facturas/selectCliente/{id}")
@@ -255,6 +245,40 @@ public class FacturaController {
             System.out.println("SI LO ENCONTRO\n\n\n\n\n\n\n");
         }else System.out.println("NO LO ENCONTRO\n\n\n\n\n\n\n");
         return "redirect:/facturas/new";
+    }
+
+    @GetMapping("/factura/{id}/descargarPDF")
+    public void descargarPdf(@PathVariable Long id, HttpServletResponse response) {
+        try {
+            Facturas factura = facturaService.findFacturaById(id); // Línea completada aquí
+            ByteArrayOutputStream baos = pdfService.generarPdf(factura);
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=factura-" + id + ".pdf");
+            response.getOutputStream().write(baos.toByteArray());
+        } catch (IOException e) {
+            System.err.println("Error al enviar PDF: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/factura/{id}/descargarXML")
+    public void generarXml(@PathVariable Long id, HttpServletResponse response) throws IOException {
+        // Generar el documento XML
+        Facturas factura = facturaService.findFacturaById(id);
+        org.jdom2.Document xmlDocument = xmlService.generarDocumentoXML(factura);
+
+        // Establecer el tipo de contenido de la respuesta
+        response.setContentType("application/xml");
+        response.setCharacterEncoding("UTF-8");
+
+        // Establecer el encabezado Content-Disposition para indicar que el archivo debe descargarse
+        response.setHeader("Content-Disposition", "attachment; filename=facturas.xml");
+
+        // Obtener el flujo de salida de la respuesta
+        try (OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream(), "UTF-8")) {
+            // Escribir el documento XML en el flujo de salida
+            XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+            xmlOutputter.output(xmlDocument, out);
+        }
     }
 
 

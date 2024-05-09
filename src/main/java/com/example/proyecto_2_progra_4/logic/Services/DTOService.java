@@ -1,9 +1,11 @@
 package com.example.proyecto_2_progra_4.logic.Services;
 
 import com.example.proyecto_2_progra_4.logic.DTOEntities.ClientesDTO;
+import com.example.proyecto_2_progra_4.logic.DTOEntities.Detalle_FacturaDTO;
 import com.example.proyecto_2_progra_4.logic.DTOEntities.ProveedoresDTO;
 import com.example.proyecto_2_progra_4.logic.DTOEntities.ProductosDTO;
 import com.example.proyecto_2_progra_4.logic.Entities.Clientes;
+import com.example.proyecto_2_progra_4.logic.Entities.Detalle_Factura;
 import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
 import com.example.proyecto_2_progra_4.logic.Entities.Productos;
 import org.springframework.stereotype.Service;
@@ -40,5 +42,15 @@ public class DTOService {
         }
 
         return productosDTO;
+    }
+
+    public List<Detalle_FacturaDTO> transformarDTOdetallesFactura(List<Detalle_Factura> list){
+        List<Detalle_FacturaDTO> detallesDTO = new ArrayList<>();
+        for (Detalle_Factura current : list) {
+            detallesDTO.add(new Detalle_FacturaDTO(current.getId_detalle(), current.getProducto().getIdProducto(), current.getProducto().getNombre(),
+                    current.getCantidad(), current.getPrecioUnitario()*current.getCantidad()));
+        }
+
+        return detallesDTO;
     }
 }
