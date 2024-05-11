@@ -82,17 +82,40 @@ function mostrarCarritoEnTabla() {
             <td>${item.costo}</td>
             <td>${item.cantidad}</td>
             <td class="divFlex">
-                <form class="formsUgly" method="post">
-                    <input id="aumentar" type="hidden" name="index" value="${item.id_detalle}"/>
+                <form class="formsUgly">
+                    <input id="aumentar" type="hidden" name="opcion" value="${item.id_detalle}"/>
                     <button class="boton boton--secundario" type="submit">+</button>
                 </form>
-                <form class="formsUgly" method="post">
-                    <input id="disminuir" type="hidden" name="index" value="${item.id_detalle}"/>
+                <form class="formsUgly" >
+                    <input id="disminuir" type="hidden" name="opcion" value="${item.id_detalle}"/>
                     <button class="boton boton--terciario" type="submit">-</button>
                 </form>
             </td>
         `;
         tbody.appendChild(fila);
+
     });
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    const tabla = document.getElementById("tablaCarrito");
+    const tbody = tabla.querySelector("tbody");
+    // Asignar un evento clic al tbody de la tabla
+    tbody.addEventListener("click", function(event) {
+        const target = event.target;
+        // Verificar si el clic fue en un botón dentro de la clase "divFlex"
+        if (target.tagName === "BUTTON" && target.parentElement.classList.contains("divFlex")) {
+            event.preventDefault(); // Prevenir el comportamiento por defecto del botón (submit)
+            const form = target.parentElement.querySelector("form");
+            const index = form.querySelector("input[name='opcion']").value;
+            if (target.id === "aumentar") {
+                // Lógica para aumentar
+                console.log("Aumentar cantidad para el índice:", index);
+            } else if (target.id === "disminuir") {
+                // Lógica para disminuir
+                console.log("Disminuir cantidad para el índice:", index);
+            }
+        }
+    });
+
+});
