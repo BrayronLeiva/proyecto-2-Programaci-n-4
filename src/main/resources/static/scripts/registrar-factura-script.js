@@ -74,7 +74,7 @@ function mostrarCarritoEnTabla() {
     }
 
     // Iterar sobre la lista de proveedores y agregar filas a la tabla
-    carrito.forEach(item => {
+    carrito.forEach((item, index) => {
         const fila = document.createElement("tr");
         fila.innerHTML = `
             <td>${item.nombreProducto}</td>
@@ -83,12 +83,12 @@ function mostrarCarritoEnTabla() {
             <td>${item.cantidad}</td>
             <td class="divFlex">
                 <form class="formsUgly">
-                    <input id="aumentar" type="hidden" name="opcion" value="${item.id_detalle}"/>
+                    <input id="aumentar" type="hidden" name="opcion" value="${index}" />
                     <button class="boton boton--secundario" type="submit">+</button>
                 </form>
                 <form class="formsUgly" >
-                    <input id="disminuir" type="hidden" name="opcion" value="${item.id_detalle}"/>
-                    <button class="boton boton--terciario" type="submit">-</button>
+                    <input id="disminuir" type="hidden" name="opcion" value="${index}" />
+                    <button class="boton boton--terciario" >-</button>
                 </form>
             </td>
         `;
@@ -97,24 +97,32 @@ function mostrarCarritoEnTabla() {
     });
 }
 
+
 document.addEventListener("DOMContentLoaded", function() {
     const tabla = document.getElementById("tablaCarrito");
     const tbody = tabla.querySelector("tbody");
-    // Asignar un evento clic al tbody de la tabla
-    tbody.addEventListener("click", function(event) {
+    tbody.addEventListener('click', function(event) {
         const target = event.target;
-        // Verificar si el clic fue en un botón dentro de la clase "divFlex"
-        if (target.tagName === "BUTTON" && target.parentElement.classList.contains("divFlex")) {
-            event.preventDefault(); // Prevenir el comportamiento por defecto del botón (submit)
-            const form = target.parentElement.querySelector("form");
-            const index = form.querySelector("input[name='opcion']").value;
-            if (target.id === "aumentar") {
+
+        // Verificar si el clic fue en un botón dentro de una fila
+        if (target.tagName.toLowerCase() === 'button') {
+            // Obtener el formulario padre del botón clicado
+            const form = target.closest('form');
+
+            // Obtener el idProveedor del input del formulario
+            const idItem = form.querySelector('input[name="opcion"]').value;
+
+            // Verificar si el botón fue de activar o desactivar
+            if (target.textContent === '+') {
                 // Lógica para aumentar
-                console.log("Aumentar cantidad para el índice:", index);
-            } else if (target.id === "disminuir") {
+                console.log("Aumentar cantidad para el índice:", idItem);
+            } else if (target.textContent === '-') {
                 // Lógica para disminuir
-                console.log("Disminuir cantidad para el índice:", index);
+                console.log("Disminuir cantidad para el índice:", idItem);
             }
+
+            // Evitar el comportamiento por defecto del botón (enviar el formulario)
+            event.preventDefault();
         }
     });
 
