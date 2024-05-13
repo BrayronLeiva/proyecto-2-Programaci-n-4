@@ -116,9 +116,11 @@ document.addEventListener("DOMContentLoaded", function() {
             if (target.textContent === '+') {
                 // Lógica para aumentar
                 console.log("Aumentar cantidad para el índice:", idItem);
+                aumentarCantidad(idItem);
             } else if (target.textContent === '-') {
                 // Lógica para disminuir
                 console.log("Disminuir cantidad para el índice:", idItem);
+                disminuirCantidad(idItem);
             }
 
             // Evitar el comportamiento por defecto del botón (enviar el formulario)
@@ -127,3 +129,48 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 });
+
+
+async function aumentarCantidad(index) {
+    try {
+        console.log(index);
+        const response = await fetch(`${backend}/api/facturas/aumentarCantidad/${index}`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            console.log("Item aumentado correctamente\n");
+            getCarrito();
+
+        } else {
+            console.error("Error al aumentar cantidad:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+async function disminuirCantidad(index) {
+    try {
+        console.log(index);
+        const response = await fetch(`${backend}/api/facturas/disminuirCantidad/${index}`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            console.log("Item aumentado correctamente\n");
+            getCarrito();
+
+        } else {
+            console.error("Error al disminui cantidad:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}

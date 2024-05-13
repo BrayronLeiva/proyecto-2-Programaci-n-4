@@ -125,7 +125,7 @@ public class FacturaController {
                 Detalle_Factura detalleFactura = new Detalle_Factura();
                 detalleFactura.setCantidad(cantidad);
                 detalleFactura.setProducto(producto);
-                detalleFactura.setPrecioUnitario(10.0);
+                detalleFactura.setPrecioUnitario((Double.parseDouble(String.valueOf(producto.getValor()))));
                 //listaItems.add(producto);
                 listaDetalleFactura.add(detalleFactura);
                 return ResponseEntity.ok().build();
@@ -154,27 +154,35 @@ public class FacturaController {
     }
 
 
-    @PostMapping("/aumentarCantidad")
-    public String aumentarCantidad(@RequestParam("index") int index, HttpSession session) {
-        // Asumiendo que 'listaDetalleFactura' está guardada en la sesión o es un campo en el controlador
-        Detalle_Factura detalle = listaDetalleFactura.get(index);
-        detalle.setCantidad(detalle.getCantidad() + 1);
-        // Asegúrate de actualizar la sesión o la lista según sea necesario
-        return "redirect:/facturas/new";
-    }
-
-
-
-    @PostMapping("/disminuirCantidad")
-    public String disminuirCantidad(@RequestParam("index") int index, HttpSession session) {
-        Detalle_Factura detalle = listaDetalleFactura.get(index);
-        detalle.setCantidad(detalle.getCantidad() - 1);
-        if (detalle.getCantidad()==0){
-            listaDetalleFactura.remove(index);
+    @PostMapping("/facturas/aumentarCantidad/{index}")
+    public ResponseEntity<?> aumentarCantidad(@PathVariable int index) {
+        try {
+            // Asumiendo que 'listaDetalleFactura' está guardada en la sesión o es un campo en el controlador
+            Detalle_Factura detalle = listaDetalleFactura.get(index);
+            detalle.setCantidad(detalle.getCantidad() + 1);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // Manejo de errores
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-        // Asegúrate de actualizar la sesión o la lista según sea necesario
-        return "redirect:/facturas/new";
     }
+
+    @PostMapping("/facturas/disminuirCantidad/{index}")
+    public ResponseEntity<?> disminuirCantidad(@PathVariable int index) {
+        try {
+            // Asumiendo que 'listaDetalleFactura' está guardada en la sesión o es un campo en el controlador
+            Detalle_Factura detalle = listaDetalleFactura.get(index);
+            detalle.setCantidad(detalle.getCantidad() - 1);
+            if (detalle.getCantidad()==0){
+                listaDetalleFactura.remove(index);
+            }
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // Manejo de errores
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
     @GetMapping("/facturas")
     public String listarFacturas(Model model, HttpSession session) {
@@ -239,7 +247,7 @@ public class FacturaController {
             Detalle_Factura detalleFactura = new Detalle_Factura();
             detalleFactura.setCantidad(1);
             detalleFactura.setProducto(producto);
-            detalleFactura.setPrecioUnitario(10.0);
+            detalleFactura.setPrecioUnitario(Double.parseDouble(String.valueOf(producto.getValor())));
             //listaItems.add(producto);
             listaDetalleFactura.add(detalleFactura);
             System.out.println("SI LO ENCONTRO\n\n\n\n\n\n\n");
