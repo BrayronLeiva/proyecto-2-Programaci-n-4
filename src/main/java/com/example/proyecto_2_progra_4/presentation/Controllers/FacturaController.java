@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -206,6 +207,7 @@ public class FacturaController {
         try {
             Clientes cliente = clienteService.findClienteById(Integer.parseInt(String.valueOf(id)));
             if (cliente != null) {
+                System.out.println("ASIGNANDO "+ cliente.getNombre());
                 session.setAttribute("clienteFactura", cliente);
             } else {
                 Clientes c = new Clientes();
@@ -224,6 +226,26 @@ public class FacturaController {
 
     }
 
+    @GetMapping("facturas/getNombreClienteFactura")
+    public ResponseEntity<?> getNombreClienteFactura(HttpSession session){
+        try {
+            Clientes clienteFactura = (Clientes) session.getAttribute("clienteFactura");
+            if (clienteFactura==null){
+                return ResponseEntity.ok().body(Collections.singletonMap("nombreCliente", "No hay ningun cliente seleccionado"));
+            }else {
+                if(clienteFactura.getUsuario().equals("NULL")){
+                    return ResponseEntity.ok().body(Collections.singletonMap("nombreCliente", "No hay ningun cliente seleccionado"));
+                }
+                return ResponseEntity.ok().body(Collections.singletonMap("nombreCliente",  clienteFactura.getNombre()));
+            }
+
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocurrió un error. Por favor, inténtalo de nuevo más tarde.");
+        }
+    }
+
     @PostMapping("/buscarCliente")
     public String buscarCliente(@RequestParam("clienteID") int clienteID, HttpSession session, Model model) {
         Clientes cliente = clienteService.findClienteById(clienteID);
@@ -240,6 +262,31 @@ public class FacturaController {
 
         return "registrar_factura"; //dudoso
     }
+
+    @PostMapping("/facturas/selectProducto/{id}")
+    public ResponseEntity<?> seleccionarProducto(@PathVariable("id") long id) {
+        try {
+            Productos producto = productoService.findById((int) id);
+            if (producto != null) {
+                Detalle_Factura detalleFactura = new Detalle_Factura();
+                detalleFactura.setCantidad(1);
+                detalleFactura.setProducto(producto);
+                detalleFactura.setPrecioUnitario(Double.parseDouble(String.valueOf(producto.getValor())));
+                listaDetalleFactura.add(detalleFactura);
+                System.out.println("SI LO ENCONTRO\n\n\n\n\n\n\n");
+            } else {
+                throw new Exception("No se encontro el producto\n");
+            }
+            return ResponseEntity.ok().build();
+
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ex.getMessage());
+        }
+    }
+
+
     @PostMapping("/buscarProducto")
     public String buscarProducto(@RequestParam("productoID") int productoId){
         Productos producto = productoService.findById(productoId);

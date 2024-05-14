@@ -133,6 +133,8 @@ async function selectCliente(id) {
 
         if (response.ok) {
             console.log("Cliente seleccionado correctamente\n");
+            //getNombreClienteFactura();
+            window.location.href = "/registrar-factura.html";
 
 
         } else {
@@ -142,3 +144,5 @@ async function selectCliente(id) {
         console.error("Error:", error);
     }
 }
+
+

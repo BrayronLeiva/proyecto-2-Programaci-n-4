@@ -1,5 +1,6 @@
 package com.example.proyecto_2_progra_4.presentation.Controllers;
 
+import com.example.proyecto_2_progra_4.logic.Entities.Clientes;
 import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
 import com.example.proyecto_2_progra_4.logic.Services.ClienteService;
 import com.example.proyecto_2_progra_4.logic.Services.ProveedorService;
@@ -47,6 +48,11 @@ public class MainController {
                 // Almacenar el ID del proveedor en la sesión
                 session.setAttribute("proveedor", proveedor);
                 session.setAttribute("usuario", proveedor.getUsuario());
+
+                Clientes cliente = new Clientes();
+                cliente.setUsuario("NULL");
+                session.setAttribute("clienteFactura", cliente);
+
                 return ResponseEntity.ok().body(Collections.singletonMap("admin", false));
 
             } else {

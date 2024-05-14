@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     window.location.href = "/admin.html";
                 } else {
                     // Si el usuario es normal, redirigir al dashboard normal
+                    sessionStorage.setItem("nombreClienteFactura", "Nada");
+                    alert(sessionStorage.getItem("nombreClienteFactura"));
                     window.location.href = "/registrar-factura.html";
                 }
             } else {

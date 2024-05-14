@@ -90,7 +90,7 @@ function mostrarProductosEnTabla() {
             <td>${producto.nombre}</td>
             <td>${producto.valor}</td>
             <td class="divFlex">
-                 <form class="formsUgly" method="post">
+                 <form class="formsUgly">
                     <input type="hidden" name="idProducto" value=${producto.idProducto} />
                     <button type="submit" class="boton--primario boton" >ADD</button>
                 </form>
@@ -123,7 +123,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 });
-/*
+
+//este metodo va hacie el controllador de facturas
 
 async function selectProducto(id) {
     try {
@@ -137,7 +138,7 @@ async function selectProducto(id) {
 
         if (response.ok) {
             console.log("Producto seleccionado correctamente\n");
-
+            window.location.href = "/registrar-factura.html";
 
         } else {
             console.error("Error al seleccionar prodcuto:", response.statusText);
@@ -145,4 +146,4 @@ async function selectProducto(id) {
     } catch (error) {
         console.error("Error:", error);
     }
-}*/
+}

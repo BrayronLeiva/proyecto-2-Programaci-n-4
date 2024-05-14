@@ -1,5 +1,9 @@
 var backend = "http://localhost:8080";
 let carrito = [];
+
+//var nombreCliente = "No se seleccionado ningun cliente";
+getNombreClienteFactura();
+
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("registrarFacturaForm").addEventListener("submit", async function(event) {
         event.preventDefault();
@@ -169,6 +173,31 @@ async function disminuirCantidad(index) {
 
         } else {
             console.error("Error al disminui cantidad:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+async function getNombreClienteFactura() {
+    try {
+        const response = await fetch(`${backend}/api/facturas/getNombreClienteFactura`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            //String = nombreCliente;
+            console.log("El nombre del cliente es :", data.nombreCliente)
+            document.getElementById("clienteNom").textContent = "Cliente: " + data.nombreCliente;
+
+
+        } else {
+            console.error("Error al seleccionar cliente:", response.statusText);
         }
     } catch (error) {
         console.error("Error:", error);
