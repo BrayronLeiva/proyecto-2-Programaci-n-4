@@ -5,7 +5,7 @@ let carrito = [];
 getNombreClienteFactura();
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("registrarFacturaForm").addEventListener("submit", async function(event) {
+    document.getElementById("registrarFacturaFormProducto").addEventListener("submit", async function(event) {
         event.preventDefault();
         // Obtener los valores del formulario
         var productoId = document.getElementById("productoId").value;
@@ -29,6 +29,8 @@ document.addEventListener("DOMContentLoaded", function() {
         } catch (error) {
             console.error("Error:", error);
         }
+
+
     });
 });
 
@@ -178,6 +180,34 @@ async function disminuirCantidad(index) {
         console.error("Error:", error);
     }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("registrarFacturaFormCliente").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        // Obtener los valores del formulario
+        const id = document.getElementById("clienteId").value;
+
+        console.log(id);
+        try {
+            const response = await fetch(`${backend}/api/facturas/selectCliente/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                alert("Exito");
+                getNombreClienteFactura();
+
+            } else {
+                alert("Error bro");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    });
+});
 
 async function getNombreClienteFactura() {
     try {

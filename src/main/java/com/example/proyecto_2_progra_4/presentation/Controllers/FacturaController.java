@@ -204,15 +204,17 @@ public class FacturaController {
 
     @PostMapping("/facturas/selectCliente/{id}")
     public ResponseEntity<?> seleccionarCliente(@PathVariable("id") long id, HttpSession session, Model model) {
+        System.out.println("Cayendo a selectCliente");
         try {
             Clientes cliente = clienteService.findClienteById(Integer.parseInt(String.valueOf(id)));
             if (cliente != null) {
                 System.out.println("ASIGNANDO "+ cliente.getNombre());
                 session.setAttribute("clienteFactura", cliente);
             } else {
-                Clientes c = new Clientes();
-                c.setUsuario("NULL");
-                session.setAttribute("clienteFactura", c); //tener cuidado al llamar este metodo por esta razon/ fixed
+                System.out.println("No se encontro\n");
+                //Clientes c = new Clientes();
+                //c.setUsuario("NULL");
+                //session.setAttribute("clienteFactura", c); //tener cuidado al llamar este metodo por esta razon/ fixed
             }
             return ResponseEntity.ok().build();
 
@@ -233,9 +235,6 @@ public class FacturaController {
             if (clienteFactura==null){
                 return ResponseEntity.ok().body(Collections.singletonMap("nombreCliente", "No hay ningun cliente seleccionado"));
             }else {
-                if(clienteFactura.getUsuario().equals("NULL")){
-                    return ResponseEntity.ok().body(Collections.singletonMap("nombreCliente", "No hay ningun cliente seleccionado"));
-                }
                 return ResponseEntity.ok().body(Collections.singletonMap("nombreCliente",  clienteFactura.getNombre()));
             }
 

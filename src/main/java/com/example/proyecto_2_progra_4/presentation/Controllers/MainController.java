@@ -49,9 +49,6 @@ public class MainController {
                 session.setAttribute("proveedor", proveedor);
                 session.setAttribute("usuario", proveedor.getUsuario());
 
-                Clientes cliente = new Clientes();
-                cliente.setUsuario("NULL");
-                session.setAttribute("clienteFactura", cliente);
 
                 return ResponseEntity.ok().body(Collections.singletonMap("admin", false));
 
