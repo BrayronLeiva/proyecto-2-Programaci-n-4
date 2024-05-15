@@ -132,7 +132,10 @@ async function selectCliente(id) {
         });
 
         if (response.ok) {
+            const data = await response.json();
             console.log("Cliente seleccionado correctamente\n");
+            sessionStorage.setItem("nombreClienteFactura", data.nombreCliente);
+            console.log("El nombre del cliente es :", data.nombreCliente);
             //getNombreClienteFactura();
             window.location.href = "/registrar-factura.html";
 

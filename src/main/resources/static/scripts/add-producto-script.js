@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             document.getElementById("nombre").value = "";
+            document.getElementById("valor").value = "";
 
 
         } catch (error) {

@@ -2,7 +2,7 @@ var backend = "http://localhost:8080";
 let carrito = [];
 
 //var nombreCliente = "No se seleccionado ningun cliente";
-getNombreClienteFactura();
+
 
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("registrarFacturaFormProducto").addEventListener("submit", async function(event) {
@@ -26,11 +26,85 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 alert("Error bro");
             }
+
+            document.getElementById("productoId").value = '';
+            document.getElementById("cantidad").value = '';
+
+
         } catch (error) {
             console.error("Error:", error);
         }
 
 
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("registrarFacturaFormCliente").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        // Obtener los valores del formulario
+        const id = document.getElementById("clienteId").value;
+
+        console.log(id);
+        try {
+            const response = await fetch(`${backend}/api/facturas/selectCliente/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Cliente seleccionado correctamente\n");
+                sessionStorage.setItem("nombreClienteFactura", data.nombreCliente);
+
+                getNombreClienteFactura();
+
+            } else {
+                alert("Error bro");
+            }
+
+            document.getElementById("clienteId").value = "";
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("ejecutarRegistro").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        try {
+            const response = await fetch(`${backend}/api/facturas/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                alert("Factura guardada correctamente\n");
+                console.log("Factura guardada correctamente\n");
+
+            } else {
+                alert("Error bro");
+            }
+
+            document.getElementById("clienteId").value = "";
+            document.getElementById("productoId").value = '';
+            document.getElementById("cantidad").value = '';
+            sessionStorage.setItem("nombreClienteFactura", "No hay ningun cliente seleccionado");
+            getCarrito();
+
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
     });
 });
 
@@ -181,55 +255,17 @@ async function disminuirCantidad(index) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("registrarFacturaFormCliente").addEventListener("submit", async function(event) {
-        event.preventDefault();
-        // Obtener los valores del formulario
-        const id = document.getElementById("clienteId").value;
 
-        console.log(id);
-        try {
-            const response = await fetch(`${backend}/api/facturas/selectCliente/${id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                alert("Exito");
-                getNombreClienteFactura();
-
-            } else {
-                alert("Error bro");
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    });
-});
-
-async function getNombreClienteFactura() {
-    try {
-        const response = await fetch(`${backend}/api/facturas/getNombreClienteFactura`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json"
-            }
-
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            //String = nombreCliente;
-            console.log("El nombre del cliente es :", data.nombreCliente)
-            document.getElementById("clienteNom").textContent = "Cliente: " + data.nombreCliente;
-
-
-        } else {
-            console.error("Error al seleccionar cliente:", response.statusText);
-        }
-    } catch (error) {
-        console.error("Error:", error);
+function getNombreClienteFactura() {
+    const name = sessionStorage.getItem("nombreClienteFactura");
+    console.log("El nombre del cliente es:", name);
+    // Asegúrate de que name no sea null antes de asignarlo al elemento HTML
+    if (name !== null) {
+        document.getElementById("clienteNom").textContent = "Cliente: " + name;
     }
 }
+
+// Ejecuta la función cuando se carga el DOM
+document.addEventListener("DOMContentLoaded", function() {
+    getNombreClienteFactura();
+});

@@ -75,34 +75,45 @@ public class FacturaController {
     }
 
     @PostMapping("/facturas/add")
-    public String registrarFactura(Facturas factura,HttpSession session, Model model) {
-        Clientes cliente = (Clientes) session.getAttribute("clienteFactura");
-        if(listaDetalleFactura.isEmpty() || cliente==null){ //en caso de que no se pueda
-            //listaDetalleFactura.clear();
+    public ResponseEntity<?> registrarFactura(HttpSession session, Model model) {
+
+        try {
+            Facturas factura = new Facturas();
+            Clientes cliente = (Clientes) session.getAttribute("clienteFactura");
+            if (listaDetalleFactura.isEmpty() || cliente == null) { //en caso de que no se pueda
+                //listaDetalleFactura.clear();
+                Clientes c = new Clientes();
+                c.setUsuario("NULL");
+                session.setAttribute("clienteFactura", c); //tener cuidado al llamar este metodo por esta razon/ fixed
+            }
+
+            factura.setProveedoresByIdProveedor((Proveedores) session.getAttribute("proveedor"));
+            factura.setMonto(calcularMonto());
+            factura.setClientesByIdCliente((Clientes) session.getAttribute("clienteFactura"));
+
+            facturaService.saveFactura(factura);
+
+            procesarListaDetalles(factura);
+
             Clientes c = new Clientes();
             c.setUsuario("NULL");
             session.setAttribute("clienteFactura", c); //tener cuidado al llamar este metodo por esta razon/ fixed
-            return "redirect:/facturas/new";
+
+            return ResponseEntity.ok().build();
+        }catch (Exception ex){
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocurrió un error. Por favor, inténtalo de nuevo más tarde.");
         }
 
-        factura.setProveedoresByIdProveedor((Proveedores) session.getAttribute("proveedor"));
-        factura.setMonto(calcularMonto());
-        factura.setClientesByIdCliente((Clientes) session.getAttribute("clienteFactura"));
+    }
 
-        facturaService.saveFactura(factura);
-
-        for(int i = 0; i < listaDetalleFactura.size(); i++){
+    public void procesarListaDetalles(Facturas factura){
+        for (int i = 0; i < listaDetalleFactura.size(); i++) {
             listaDetalleFactura.get(i).setFactura(factura);
             detalleFacturaService.saveDetalleFactura(listaDetalleFactura.get(i));
         }
-        //listaItems.clear();
+
         listaDetalleFactura.clear();
-
-        Clientes c = new Clientes();
-        c.setUsuario("NULL");
-        session.setAttribute("clienteFactura", c); //tener cuidado al llamar este metodo por esta razon/ fixed
-
-        return "redirect:/facturas/new";
     }
     double calcularMonto(){
         double monto = 0;
@@ -161,6 +172,8 @@ public class FacturaController {
             // Asumiendo que 'listaDetalleFactura' está guardada en la sesión o es un campo en el controlador
             Detalle_Factura detalle = listaDetalleFactura.get(index);
             detalle.setCantidad(detalle.getCantidad() + 1);
+            System.out.println("Cantidad de item " + detalle.getProducto().getNombre() + " = " + detalle.getCantidad());
+            System.out.println("Valor de item " + detalle.getProducto().getNombre() + " = " + detalle.getPrecioUnitario());
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             // Manejo de errores
@@ -212,11 +225,12 @@ public class FacturaController {
                 session.setAttribute("clienteFactura", cliente);
             } else {
                 System.out.println("No se encontro\n");
+                return ResponseEntity.ok().body(Collections.singletonMap("nombreCliente", "No hay ningun cliente seleccionado"));
                 //Clientes c = new Clientes();
                 //c.setUsuario("NULL");
                 //session.setAttribute("clienteFactura", c); //tener cuidado al llamar este metodo por esta razon/ fixed
             }
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(Collections.singletonMap("nombreCliente",  cliente.getNombre()));
 
         }catch (Exception ex){
             System.out.println(ex.getMessage());
