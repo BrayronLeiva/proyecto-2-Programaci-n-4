@@ -1,13 +1,7 @@
 package com.example.proyecto_2_progra_4.logic.Services;
 
-import com.example.proyecto_2_progra_4.logic.DTOEntities.ClientesDTO;
-import com.example.proyecto_2_progra_4.logic.DTOEntities.Detalle_FacturaDTO;
-import com.example.proyecto_2_progra_4.logic.DTOEntities.ProveedoresDTO;
-import com.example.proyecto_2_progra_4.logic.DTOEntities.ProductosDTO;
-import com.example.proyecto_2_progra_4.logic.Entities.Clientes;
-import com.example.proyecto_2_progra_4.logic.Entities.Detalle_Factura;
-import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
-import com.example.proyecto_2_progra_4.logic.Entities.Productos;
+import com.example.proyecto_2_progra_4.logic.DTOEntities.*;
+import com.example.proyecto_2_progra_4.logic.Entities.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,4 +47,14 @@ public class DTOService {
 
         return detallesDTO;
     }
+
+    public List<FacturasDTO> transformarDTOFacturas(List<Facturas> list){
+        List<FacturasDTO> facturasDTO = new ArrayList<>();
+        for (Facturas current : list) {
+            facturasDTO.add(new FacturasDTO(current.getIdFactura(),(Double) current.getMonto(), current.getClientesByIdCliente().getNombre()));
+        }
+
+        return facturasDTO;
+    }
+
 }

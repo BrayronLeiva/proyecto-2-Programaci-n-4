@@ -2,6 +2,7 @@ package com.example.proyecto_2_progra_4.presentation.Controllers;
 
 
 import com.example.proyecto_2_progra_4.logic.DTOEntities.Detalle_FacturaDTO;
+import com.example.proyecto_2_progra_4.logic.DTOEntities.FacturasDTO;
 import com.example.proyecto_2_progra_4.logic.DTOEntities.ProveedoresDTO;
 import com.example.proyecto_2_progra_4.logic.Entities.*;
 import com.example.proyecto_2_progra_4.logic.Services.*;
@@ -198,21 +199,26 @@ public class FacturaController {
     }
 
 
-    @GetMapping("/facturas")
-    public String listarFacturas(Model model, HttpSession session) {
+    @GetMapping("/facturas/getFacturas")
+    public ResponseEntity<?> listarFacturas(Model model, HttpSession session) {
+        try {
+            //usuario logeado actualmente
+            String usuarioLogeado = (String) session.getAttribute("usuario");
+            //Verificar si hay un usuario logeado
+            if (usuarioLogeado != null) {
+                //lista proveedor actual
+                List<Facturas> listaFacturas = facturaService.findFacturasByProveedorActual(usuarioLogeado);
+                return ResponseEntity.ok().body(dtoService.transformarDTOFacturas(listaFacturas));
+            }
 
-        //usuario logeado actualmente
-        String usuarioLogeado = (String) session.getAttribute("usuario");
-        //Verificar si hay un usuario logeado
-        if (usuarioLogeado != null) {
-            //lista proveedor actual
-            List<Facturas> listaFacturas = facturaService.findFacturasByProveedorActual(usuarioLogeado);
-            //Agregar la lista de productos al modelo
-            model.addAttribute("facturas", listaFacturas);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocurrió un error. Por favor, inténtalo de nuevo más tarde.");
         }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Usuario No Esta Logeado.");
 
-
-        return "lista-facturas";
     }
 
     @PostMapping("/facturas/selectCliente/{id}")

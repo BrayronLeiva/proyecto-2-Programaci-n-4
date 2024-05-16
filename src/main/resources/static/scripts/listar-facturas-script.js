@@ -20,8 +20,8 @@ async function obtenerFacturas() {
         if (response.ok) {
             const lista = await response.json();
             clientes = lista; // Llenar la lista de proveedores
-            console.log("Tamaño de la lista de clientes:", clientes.length);
-            mostrarClientesEnTabla();
+            console.log("Tamaño de la lista de facturas:", clientes.length);
+            mostrarFacturasEnTabla();
         } else {
             console.error("Error al obtener la lista de proveedores:", response.statusText);
         }
@@ -59,8 +59,15 @@ function mostrarFacturasEnTabla() {
             <td>${factura.nombreCliente}</td>
             <td>${factura.monto}</td>
             <td class="divFlex">
-                <a class="boton--primario boton">Descargar PDF</a>
-                <a class="boton--primario boton">Descargar XML</a>
+                <form class="formsUgly">
+                    <input id="PDF" type="hidden" name="opcion" value="${factura.idFactura}" />
+                    <button class="boton--primario boton">Descargar PDF</button>
+                </form>
+                <form class="formsUgly" >
+                    <input id="XML" type="hidden" name="opcion" value="${factura.idFactura}" />
+                     <button class="boton--primario boton">Descargar XML</button>
+                </form>       
+               
             </td>
         `;
         tbody.appendChild(fila);
@@ -68,7 +75,7 @@ function mostrarFacturasEnTabla() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    const tabla = document.getElementById("tablaClientes");
+    const tabla = document.getElementById("tablaFacturas");
     const tbody = tabla.querySelector("tbody");
     tbody.addEventListener('click', function(event) {
         const target = event.target;
@@ -78,12 +85,18 @@ document.addEventListener("DOMContentLoaded", function() {
             // Obtener el formulario padre del botón clicado
             const form = target.closest('form');
 
+            // Obtener el idProveedor del input del formulario
+            const idAction = form.querySelector('input[name="opcion"]').value;
 
-            const idCliente = form.querySelector('input[name="idCliente"]').value;
+            // Verificar si el botón fue de activar o desactivar
+            if (target.textContent === 'Descargar PDF') {
+                // Lógica para aumentar
+                console.log("Descargando Pdf");
 
-            selectCliente(idCliente);
-
-
+            } else if (target.textContent === 'Descargar XML') {
+                // Lógica para disminuir
+                console.log("Descargando Xml");
+            }
             // Evitar el comportamiento por defecto del botón (enviar el formulario)
             event.preventDefault();
         }
