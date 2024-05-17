@@ -80,20 +80,38 @@ public class MainController {
 
     }
 
-    @GetMapping("/logOut")
+   /* @GetMapping("/logOut")
     public String login(HttpSession session) {
         if(session!=null){
             session.invalidate();
         }
         return "redirect:/index.html";
 
-    }
+    }*/
 
     @GetMapping("/about")
     public String about() {
         return "about";
 
     }
+   /* @GetMapping("/logOut")
+    public ResponseEntity<?> logout(HttpSession session) {
+        if (session != null) {
+            session.invalidate();
+        }
+        return ResponseEntity.ok().body("Logout successful");
+    }*/
+
+
+    @GetMapping("/logOut")
+    public String logOut(HttpSession session) {
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/index.html";
+    }
+
+
 
 
 
