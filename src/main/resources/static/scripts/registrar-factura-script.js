@@ -1,4 +1,4 @@
-var backend = "http://localhost:8080";
+swevar backend = "http://localhost:8080";
 let carrito = [];
 
 //var nombreCliente = "No se seleccionado ningun cliente";
