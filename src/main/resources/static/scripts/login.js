@@ -1,4 +1,4 @@
-
+var backend = "http://localhost:8080";
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("loginForm").addEventListener("submit", async function(event) {
         event.preventDefault();
@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     // Si el usuario es normal, redirigir al dashboard normal
                     sessionStorage.setItem("nombreClienteFactura", "No hay ningun cliente seleccionado");
+                    getUser();
                     window.location.href = "/registrar-factura.html";
                 }
             } else {
@@ -33,3 +34,25 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+
+async function getUser() {
+    try {
+        const response = await fetch(`${backend}/api/getUser`, {
+            method: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            const user = await response.json();
+            alert(user.nombre);
+
+        } else {
+            console.error("Error al activar proveedor:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}

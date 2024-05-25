@@ -12,15 +12,25 @@ import java.util.Objects;
 public class FacturasDTO {
 
     private int idFactura;
-
+    private int idCliente;
+    private int idProveedor;
     private Double monto;
-
     private String nombreCliente;
+
+
 
     public FacturasDTO(int idFactura, Double monto, String nombreCliente) {
         this.idFactura = idFactura;
         this.monto = monto;
         this.nombreCliente = nombreCliente;
+    }
+
+    public FacturasDTO(int idFactura, Double monto, String nombreCliente, int idCliente, int idProveedor) {
+        this.idFactura = idFactura;
+        this.monto = monto;
+        this.nombreCliente = nombreCliente;
+        this.idCliente = idCliente;
+        this.idProveedor = idProveedor;
     }
 
     public int getIdFactura() {
@@ -46,4 +56,12 @@ public class FacturasDTO {
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
     }
+
+    public int getIdCliente() {return idCliente;}
+
+    public void setIdCliente(int idCliente) {this.idCliente = idCliente;}
+
+    public int getIdProveedor() {return idProveedor;}
+
+    public void setIdProveedor(int idProveedor) {this.idProveedor = idProveedor;}
 }

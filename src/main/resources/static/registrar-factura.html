@@ -5,6 +5,7 @@
     <title>Registrar Factura</title>
     <link rel="stylesheet" href="styles/styles.css">
     <script src="scripts/registrar-factura-script.js"></script>
+    <script src="scripts/logout.js"></script>
     <!-- Incluye aquí tu CSS para estilos, si es necesario -->
 
 </head>
@@ -19,13 +20,12 @@
             </a>
 
             <nav class="navegacion">
-                <a class="navegacion__enlace">FACTURAR</a>
+                <a href="registrar-factura.html" class="navegacion__enlace">FACTURAR</a>
                 <a href="add-cliente.html" class="navegacion__enlace">CLIENTES</a>
                 <a href="add-producto.html" class="navegacion__enlace">PRODUCTOS</a>
                 <a href="lista_facturas.html" class="navegacion__enlace">FACTURAS</a>
-                <a href="about.html" class="navegacion__enlace">ACERCA DE</a>
-                <a class="navegacion__enlace">CERRAR SESION</a>
-                <!--<a th:href="@{/editar}" th:if="${session.usuario!=null}" th:text="${session.usuario.toUpperCase()}" class="navegacion__enlace" ></a>-->
+                <a href="aboutIn.html" class="navegacion__enlace">ACERCA DE</a>
+                <a id="logout-link" class="navegacion__enlace">CERRAR SESION</a>
             </nav>
 
 
@@ -61,14 +61,18 @@
                 <input type="submit" class="boton boton--primario" value="Agregar"/>
             </form>
             <a href="add-cliente.html" class="boton--primario boton ">Buscar</a>
+
+        </div>
+        <div class="divForms">
             <h4 id="clienteNom">No hay ningun cliente seleccionado</h4>
         </div>
 
-        <div class="divForms">
-            <form id="ejecutarRegistro" class="formsUgly" method="post">
-                <input type="submit" class="boton boton--primario" value="Registrar Factura"/>
-            </form>
-        </div>
+    </div>
+
+    <div >
+        <form id="ejecutarRegistro" class="formsUgly" method="post">
+            <input type="submit" class="boton boton--primario" value="Registrar Factura"/>
+        </form>
     </div>
 
     <table id="tablaCarrito">

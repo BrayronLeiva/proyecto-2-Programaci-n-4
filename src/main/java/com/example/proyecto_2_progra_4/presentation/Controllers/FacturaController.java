@@ -27,6 +27,10 @@ import java.util.List;
 
 import java.io.ByteArrayOutputStream;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+
 
 @RestController
 @RequestMapping("/api")
@@ -321,39 +325,41 @@ public class FacturaController {
         return "redirect:/facturas/new";
     }
 
-    @GetMapping("/factura/{id}/descargarPDF")
-    public void descargarPdf(@PathVariable Long id, HttpServletResponse response) {
+    @GetMapping("/facturas/descargarPDF/{id}")
+    public ResponseEntity<?> descargarPdf(@PathVariable Long id, HttpServletResponse response) {
         try {
-            Facturas factura = facturaService.findFacturaById(id); // Línea completada aquí
+            Facturas factura = facturaService.findFacturaById(id);
             ByteArrayOutputStream baos = pdfService.generarPdf(factura);
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=factura-" + id + ".pdf");
-            response.getOutputStream().write(baos.toByteArray());
-        } catch (IOException e) {
-            System.err.println("Error al enviar PDF: " + e.getMessage());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "factura-" + id + ".pdf");
+
+            return new ResponseEntity<>(baos.toByteArray(), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            System.err.println("Error al enviar PDF: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
 
-    @GetMapping("/factura/{id}/descargarXML")
-    public void generarXml(@PathVariable Long id, HttpServletResponse response) throws IOException {
-        // Generar el documento XML
-        Facturas factura = facturaService.findFacturaById(id);
-        org.jdom2.Document xmlDocument = xmlService.generarDocumentoXML(factura);
 
-        // Establecer el tipo de contenido de la respuesta
-        response.setContentType("application/xml");
-        response.setCharacterEncoding("UTF-8");
+    @GetMapping("/facturas/renderXML/{id}")
+    public ResponseEntity<FacturasDTO> renderXml(@PathVariable Long id, HttpServletResponse response) throws IOException {
 
-        // Establecer el encabezado Content-Disposition para indicar que el archivo debe descargarse
-        response.setHeader("Content-Disposition", "attachment; filename=facturas.xml");
+        // Enviar Json para el documento XML
+        try {
+            Facturas factura = facturaService.findFacturaById(id);
+            FacturasDTO result = dtoService.transformarDTOFactura(factura);
 
-        // Obtener el flujo de salida de la respuesta
-        try (OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream(), "UTF-8")) {
-            // Escribir el documento XML en el flujo de salida
-            XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-            xmlOutputter.output(xmlDocument, out);
+            return ResponseEntity.ok().body(result);
+
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
 
 

@@ -77,7 +77,8 @@ function mostrarFacturasEnTabla() {
 document.addEventListener("DOMContentLoaded", function() {
     const tabla = document.getElementById("tablaFacturas");
     const tbody = tabla.querySelector("tbody");
-    tbody.addEventListener('click', function(event) {
+    tbody.addEventListener('click', async function(event) {
+        event.preventDefault();
         const target = event.target;
 
         // Verificar si el clic fue en un botón dentro de una fila
@@ -85,21 +86,101 @@ document.addEventListener("DOMContentLoaded", function() {
             // Obtener el formulario padre del botón clicado
             const form = target.closest('form');
 
-            // Obtener el idProveedor del input del formulario
-            const idAction = form.querySelector('input[name="opcion"]').value;
-
-            // Verificar si el botón fue de activar o desactivar
+            // Obtener el idFactura del input del formulario
+            const idFactura = form.querySelector('input[name="opcion"]').value;
             if (target.textContent === 'Descargar PDF') {
                 // Lógica para aumentar
                 console.log("Descargando Pdf");
+                await descargarPdf(idFactura);
 
             } else if (target.textContent === 'Descargar XML') {
-                // Lógica para disminuir
-                console.log("Descargando Xml");
+                // Lógica para descargar XML
+                console.log("Descargando Xml para la factura:", idFactura);
+                await getFacturaforXML(idFactura);
             }
             // Evitar el comportamiento por defecto del botón (enviar el formulario)
             event.preventDefault();
         }
     });
-
 });
+
+async function getFacturaforXML(id) {
+    try {
+        const response = await fetch(`${backend}/api/facturas/renderXML/${id}`, {
+            method: 'GET',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            const factura = await response.json();
+            //const xmlText = await response.text();
+            const xmlText = renderXML(factura);
+            const blob = new Blob([xmlText], { type: 'application/xml' });
+
+            window.open(URL.createObjectURL(blob));
+
+            console.log("XML renderizado correctamente\n");
+        } else {
+            console.error("Error al renderizar el XML:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+function renderXML(factura){
+    const xmlDoc = document.implementation.createDocument("", "", null);
+    const facturaElement = xmlDoc.createElement("factura");
+
+    const idFacturaElement = xmlDoc.createElement("idFactura");
+    idFacturaElement.textContent = factura.idFactura;
+    facturaElement.appendChild(idFacturaElement);
+
+    const idProveedorElement = xmlDoc.createElement("idProveedor");
+    idProveedorElement.textContent = factura.idProveedor;
+    facturaElement.appendChild(idProveedorElement);
+
+    const idClienteElement = xmlDoc.createElement("idCliente");
+    idClienteElement.textContent = factura.idCliente;
+    facturaElement.appendChild(idClienteElement);
+
+    const nombreClienteElement = xmlDoc.createElement("nombreCliente");
+    nombreClienteElement.textContent = factura.nombreCliente;
+    facturaElement.appendChild(nombreClienteElement);
+
+    const montoElement = xmlDoc.createElement("monto");
+    montoElement.textContent = factura.monto;
+    facturaElement.appendChild(montoElement);
+
+    xmlDoc.appendChild(facturaElement);
+
+    const serializer = new XMLSerializer();
+    return serializer.serializeToString(xmlDoc);
+
+}
+
+async function descargarPdf(id) {
+    try {
+        const response = await fetch(`${backend}/api/facturas/descargarPDF/${id}`, {
+            method: 'GET',
+            headers: {
+                "Accept": "application/pdf",
+                "Content-Type": "application/pdf"
+            }
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            window.open(URL.createObjectURL(blob));
+
+            console.log("PDF renderizado correctamente\n");
+        } else {
+            console.error("Error al descargar el Pdf:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}

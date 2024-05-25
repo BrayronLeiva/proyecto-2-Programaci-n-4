@@ -1,8 +1,10 @@
 package com.example.proyecto_2_progra_4.presentation.Controllers;
 
+import com.example.proyecto_2_progra_4.logic.DTOEntities.ProveedoresDTO;
 import com.example.proyecto_2_progra_4.logic.Entities.Clientes;
 import com.example.proyecto_2_progra_4.logic.Entities.Proveedores;
 import com.example.proyecto_2_progra_4.logic.Services.ClienteService;
+import com.example.proyecto_2_progra_4.logic.Services.DTOService;
 import com.example.proyecto_2_progra_4.logic.Services.ProveedorService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class MainController {
     private ProveedorService proveedorService;
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private DTOService dtoService;
 
 
     @PostMapping("/login")
@@ -62,41 +66,31 @@ public class MainController {
         }
     }
 
-    @PostMapping("/login2")
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model,
-                        HttpSession session) {
-        if(Objects.equals(username, "admin") && Objects.equals(password, "admin")){
-            return "redirect:/admin";
-        }
-        Proveedores proveedor = proveedorService.encontrarPorUsuario(username);
-        if(proveedorService.validarCredenciales(username, password) && proveedor.isEstado()){
-            // Obtener el proveedor autenticado
-            // Almacenar el ID del proveedor en la sesión
-            session.setAttribute("proveedor", proveedor);
-            session.setAttribute("usuario", proveedor.getUsuario());
-            return "redirect:/facturas/new"; // Asegúrate de redirigir a una ruta válida
-
-        } return "redirect:/index.html";
-
-    }
-
     @GetMapping("/logOut")
-    public String login(HttpSession session) {
-        if(session!=null){
-            session.invalidate();
+    public ResponseEntity<?> login(HttpSession session) {
+        try {
+            if (session != null) {
+                session.invalidate();
+            }
+            return ResponseEntity.ok().build();
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ex.getMessage());
         }
-        return "redirect:/index.html";
-
     }
 
-    @GetMapping("/about")
-    public String about() {
-        return "about";
-
+    @GetMapping("/getUser")
+    private ResponseEntity<ProveedoresDTO> getUser(HttpSession session){
+        try{
+            ProveedoresDTO user = dtoService.transformarDTOProveedore((Proveedores) session.getAttribute("proveedor"));
+            return ResponseEntity.ok().body(user);
+        }
+        catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-
-
-
 
 
 }

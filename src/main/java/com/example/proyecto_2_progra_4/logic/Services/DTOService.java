@@ -20,6 +20,13 @@ public class DTOService {
         return proveedpresDTO;
     }
 
+    public ProveedoresDTO transformarDTOProveedore(Proveedores obj){
+
+        return new ProveedoresDTO(obj.getIdProveedor(), obj.getTipo(), obj.getNombre(),
+                    obj.getUsuario(), obj.isEstado());
+
+    }
+
     public List<ClientesDTO> transformarDTOClientes(List<Clientes> list){
         List<ClientesDTO> clientesDTO = new ArrayList<>();
         for (Clientes current : list) {
@@ -56,5 +63,14 @@ public class DTOService {
 
         return facturasDTO;
     }
+
+    public FacturasDTO transformarDTOFactura(Facturas obj){
+
+        return new FacturasDTO(obj.getIdFactura(),(Double) obj.getMonto(), obj.getClientesByIdCliente().getNombre(),
+                obj.getClientesByIdCliente().getIdCliente(), obj.getProveedoresByIdProveedor().getIdProveedor());
+    }
+
+
+
 
 }
