@@ -110,4 +110,23 @@ public class ProveedorController {
             return "editar_proveedor";
         }
     }
+
+
+    @PostMapping("/proveedores/update")
+    public ResponseEntity<?> updateProveedor(@RequestBody Proveedores proveedor, HttpSession session) {
+        try {
+            Proveedores proveedorActual = (Proveedores) session.getAttribute("proveedor");
+            if (proveedorActual == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No hay proveedor en sesión.");
+            }
+            proveedorActual.setNombre(proveedor.getNombre());
+            proveedorActual.setTipo(proveedor.getTipo());
+            proveedorActual.setUsuario(proveedor.getUsuario());
+            proveedorActual.setClave(proveedor.getClave());
+            proveedorService.saveProveedor(proveedorActual);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar los datos del proveedor.");
+        }
+    }
 }
