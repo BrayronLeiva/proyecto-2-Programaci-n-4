@@ -1,32 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Lista de Facturas</title>
     <link rel="stylesheet" href="../static/styles/styles.css">
+    <script src="scripts/listar-facturas-script.js"></script>
+    <script src="scripts/logout.js"></script>
 </head>
 <body>
-<header th:replace="~{fragments/header :: header}"></header>
+
+<header class="header">
+
+    <div class="contenedor contenedor--header">
+        <div class="barra">
+            <a class="logo" >
+                <h1 class="logo__nombre no-margin centrar-texto">Facturacion<span class="logo__bold">FB</span> </h1>
+            </a>
+
+            <nav class="navegacion">
+                <a href="registrar-factura.html" class="navegacion__enlace">FACTURAR</a>
+                <a href="add-cliente.html" class="navegacion__enlace">CLIENTES</a>
+                <a href="add-producto.html" class="navegacion__enlace">PRODUCTOS</a>
+                <a href="lista_facturas.html" class="navegacion__enlace">FACTURAS</a>
+                <a href="editar-proveedor.html" class="navegacion__enlace">EDITAR PERFIL</a>
+                <a href="aboutIn.html" class="navegacion__enlace">ACERCA DE</a>
+                <a href ="index.html" id="logout-link" class="navegacion__enlace">CERRAR SESION</a>
+            </nav>
+
+        </div>
+    </div>
+
+</header>
 <div class="contenedor contenido-principal">
-    <h1>Lista de Facturas</h1>
-    <table th:if="${not #lists.isEmpty(facturas)}">
+    <table id="tablaFacturas">
+        <h2 id="tituloTablaFacturas">Lista de Facturas</h2>
+        <h2 id="emptyTablaFacturas">No Hay Facturas Registradas</h2>
         <tr>
             <th>ID</th>
             <th>Cliente</th>
             <th>Total</th>
             <th>Acciones</th>
         </tr>
-        <tr th:each="factura : ${facturas}">
-            <td th:text="${factura.idFactura}"></td>
-            <td th:text="${factura.clientesByIdCliente.nombre}"></td>
-            <td th:text="${factura.monto}"></td>
+        <tr >
+            <td></td>
+            <td></td>
+            <td></td>
             <td>
-                <a class="boton--primario boton" th:href="@{/factura/{id}/descargarPDF(id=${factura.idFactura})}">Descargar PDF</a>
-                <a class="boton--primario boton" th:href="@{/factura/{id}/descargarXML(id=${factura.idFactura})}">Descargar XML</a>
             </td>
         </tr>
     </table>
-    <p th:if="${#lists.isEmpty(facturas)}">No hay facturas disponibles.</p>
 </div>
 
 </body>
