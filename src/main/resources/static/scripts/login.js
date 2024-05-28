@@ -47,7 +47,7 @@ async function getUser() {
 
         if (response.ok) {
             const user = await response.json();
-            alert(user.nombre);
+            //alert(user.nombre);
 
         } else {
             console.error("Error al activar proveedor:", response.statusText);

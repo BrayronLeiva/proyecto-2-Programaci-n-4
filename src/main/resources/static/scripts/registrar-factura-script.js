@@ -101,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById("productoId").value = '';
                 document.getElementById("cantidad").value = '';
                 sessionStorage.setItem("nombreClienteFactura", "No hay ningun cliente seleccionado");
+                getNombreClienteFactura();
                 getCarrito();
 
 
