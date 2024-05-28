@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Proveedor</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="scripts/editar-proveedor-script.js"></script>
+    <script src="scripts/logout.js"></script>
+    <script src="scripts/get-user-info.js"></script>
+</head>
+<body>
+<header class="header">
+    <div class="contenedor contenedor--header">
+        <div class="barra">
+            <a class="logo" >
+                <h1 class="logo__nombre no-margin centrar-texto">Facturacion<span class="logo__bold">FB</span> </h1>
+            </a>
+            <nav class="navegacion">
+                <a href="registrar-factura.html" class="navegacion__enlace">FACTURAR</a>
+                <a href="add-cliente.html" class="navegacion__enlace">CLIENTES</a>
+                <a href="add-producto.html" class="navegacion__enlace">PRODUCTOS</a>
+                <a href="lista_facturas.html" class="navegacion__enlace">FACTURAS</a>
+                <a href="editar-proveedor.html" class="navegacion__enlace">EDITAR PERFIL</a>
+                <a href="aboutIn.html" class="navegacion__enlace">ACERCA DE</a>
+                <a href ="index.html" id="logout-link" class="navegacion__enlace">CERRAR SESION</a>
+            </nav>
+            <div class="usuario-logueado">
+                Bienvenido, <span id="nombre-proveedor"></span>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="contenedor contenido-principal">
+    <h2>Editar Datos del Proveedor</h2>
+    <form id="editar-proveedor-form" method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required /><br>
+
+        <label for="tipo">Tipo:</label>
+        <select class="boton boton--primario" id="tipo" name="tipo" required>
+            <option value="Bienes">Bienes</option>
+            <option value="Servicios">Servicios</option>
+        </select><br>
+
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" name="usuario" required /><br>
+
+        <label for="clave">Clave:</label>
+        <input type="password" id="clave" name="clave" required /><br>
+
+        <input type="submit" class="boton boton--primario" value="Guardar Cambios"/>
+    </form>
+</div>
+</body>
+</html>
