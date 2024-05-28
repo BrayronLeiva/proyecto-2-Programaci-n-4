@@ -20,11 +20,10 @@ document.addEventListener("DOMContentLoaded", function() {
             });
 
             if (response.ok) {
-                alert("Exito");
                 getCarrito();
 
             } else {
-                alert("Error bro");
+                alert("ID Invalido");
             }
 
             document.getElementById("productoId").value = '';
@@ -63,7 +62,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 getNombreClienteFactura();
 
             } else {
-                alert("Error bro");
+                console.log("Cliente seleccionado incorrectamente\n");
+                sessionStorage.setItem("nombreClienteFactura", "No hay ningun cliente seleccionado");
+                alert("ID No Valido");
             }
 
             document.getElementById("clienteId").value = "";
@@ -78,35 +79,44 @@ document.addEventListener("DOMContentLoaded", function() {
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("ejecutarRegistro").addEventListener("submit", async function(event) {
         event.preventDefault();
+        if(validarDatos()) {
 
-        try {
-            const response = await fetch(`${backend}/api/facturas/add`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
+            try {
+                const response = await fetch(`${backend}/api/facturas/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    alert("Factura guardada correctamente\n");
+                    console.log("Factura guardada correctamente\n");
+
+                } else {
+                    alert("Selecciona Todos Los Datos Correspondientes");
                 }
-            });
 
-            if (response.ok) {
-                alert("Factura guardada correctamente\n");
-                console.log("Factura guardada correctamente\n");
+                document.getElementById("clienteId").value = "";
+                document.getElementById("productoId").value = '';
+                document.getElementById("cantidad").value = '';
+                sessionStorage.setItem("nombreClienteFactura", "No hay ningun cliente seleccionado");
+                getCarrito();
 
-            } else {
-                alert("Error bro");
+
+            } catch (error) {
+                console.error("Error:", error);
             }
-
-            document.getElementById("clienteId").value = "";
-            document.getElementById("productoId").value = '';
-            document.getElementById("cantidad").value = '';
-            sessionStorage.setItem("nombreClienteFactura", "No hay ningun cliente seleccionado");
-            getCarrito();
-
-
-        } catch (error) {
-            console.error("Error:", error);
+        }else{
+            alert("Seleccione Todos Los Datos Correspondientes");
         }
     });
 });
+
+function validarDatos(){
+    return !(document.getElementById("clienteNom").value === "No hay ningun cliente seleccionado"
+        || carrito.length === 0);
+}
 
 async function getCarrito() {
     try {

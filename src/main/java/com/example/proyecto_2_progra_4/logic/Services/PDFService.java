@@ -43,6 +43,8 @@ public class PDFService {
 
             // Añadir elementos al cuadro
             cell.addElement(new Paragraph("Factura ID: " + factura.getIdFactura(), normalFont));
+            cell.addElement(new Paragraph("Proveedor ID: " + factura.getProveedoresByIdProveedor().getIdProveedor(), normalFont));
+            cell.addElement(new Paragraph("Cliente ID: " + factura.getClientesByIdCliente().getIdCliente(), normalFont));
             cell.addElement(new Paragraph("Cliente: " + factura.getClientesByIdCliente().getNombre(), normalFont));
             cell.addElement(new Paragraph("Total: " + factura.getMonto(), normalFont));
 

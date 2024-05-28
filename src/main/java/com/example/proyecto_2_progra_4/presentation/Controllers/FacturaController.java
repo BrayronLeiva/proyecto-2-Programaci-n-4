@@ -133,10 +133,11 @@ public class FacturaController {
 
 
     @PostMapping("/facturas/addItem/{productoId}/{cantidad}")
-    public ResponseEntity<?> registrarDetalleFactura(@PathVariable Long productoId, @PathVariable int cantidad) {
+    public ResponseEntity<?> registrarDetalleFactura(@PathVariable Long productoId, @PathVariable int cantidad, HttpSession session) {
         try {
             Productos producto = productoService.findById(Math.toIntExact(productoId));
-            if (producto.getNombre() != null) {
+            List<Productos> myProducts = productoService.findProductosByProveedorActual((String) session.getAttribute("usuario"));
+            if (producto.getNombre() != null && myProducts.contains(producto)) {
                 System.out.println("--------------: " + producto.getNombre());
                 System.out.println("--------------:" + cantidad);
                 Detalle_Factura detalleFactura = new Detalle_Factura();
@@ -230,15 +231,14 @@ public class FacturaController {
         System.out.println("Cayendo a selectCliente");
         try {
             Clientes cliente = clienteService.findClienteById(Integer.parseInt(String.valueOf(id)));
-            if (cliente != null) {
-                System.out.println("ASIGNANDO "+ cliente.getNombre());
+            List<Clientes> myClients = clienteService.findClieteByProveedorActual((String) session.getAttribute("usuario"));
+            if (cliente != null && myClients.contains(cliente)) {
+
+                System.out.println("ASIGNANDO " + cliente.getNombre());
                 session.setAttribute("clienteFactura", cliente);
+
             } else {
-                System.out.println("No se encontro\n");
-                return ResponseEntity.ok().body(Collections.singletonMap("nombreCliente", "No hay ningun cliente seleccionado"));
-                //Clientes c = new Clientes();
-                //c.setUsuario("NULL");
-                //session.setAttribute("clienteFactura", c); //tener cuidado al llamar este metodo por esta razon/ fixed
+                throw new Exception("Id no valido");
             }
             return ResponseEntity.ok().body(Collections.singletonMap("nombreCliente",  cliente.getNombre()));
 

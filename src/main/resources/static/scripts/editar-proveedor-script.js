@@ -45,7 +45,6 @@ async function obtenerDatosProveedor() {
             document.getElementById("nombre").value = proveedor.nombre;
             document.getElementById("tipo").value = proveedor.tipo;
             document.getElementById("usuario").value = proveedor.usuario;
-            alert(proveedor.clave);
             document.getElementById("clave").value = proveedor.clave;
         } else {
             alert("Error al obtener los datos del proveedor.");

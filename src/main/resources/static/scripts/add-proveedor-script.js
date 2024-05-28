@@ -6,30 +6,39 @@ document.addEventListener("DOMContentLoaded", function() {
         const tipo = document.getElementById("tipo").value;
         const usuario = document.getElementById("usuario").value;
         const clave = document.getElementById("clave").value;
+        if(validarCreedenciales(nombre,usuario,clave)) {
 
-        try {
-            const response = await fetch("/api/proveedor/add", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json" // Ajustar el Content-Type
-                },
-                body: JSON.stringify({nombre, tipo, usuario, clave})
-            }); //fin de peticion
+            try {
+                const response = await fetch("/api/proveedor/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json" // Ajustar el Content-Type
+                    },
+                    body: JSON.stringify({nombre, tipo, usuario, clave})
+                }); //fin de peticion
 
-            if (response.ok) {
-                alert("Proveedor Registrado Correctamente")
+                if (response.ok) {
+                    alert("Proveedor Registrado Correctamente")
 
-            } else {
-                alert("Error Bro");
+                } else {
+                    alert("Error Bro");
+                }
+
+                document.getElementById("nombre").value = "";
+                document.getElementById("tipo").value = "";
+                document.getElementById("usuario").value = "";
+                document.getElementById("clave").value = "";
+
+            } catch (error) {
+                console.error("Error:", error);
             }
-
-            document.getElementById("nombre").value = "";
-            document.getElementById("tipo").value = "";
-            document.getElementById("usuario").value = "";
-            document.getElementById("clave").value = "";
-
-        } catch (error) {
-            console.error("Error:", error);
+        }else{
+            alert("Hay Campos Vacios");
         }
     });
 });
+
+
+function validarCreedenciales(nombre, usuario, clave){
+    return !(nombre === "" || usuario === "" || clave === "");
+}
