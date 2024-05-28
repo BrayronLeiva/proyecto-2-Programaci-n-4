@@ -21,13 +21,15 @@ public class ProveedoresDTO {
     private String usuario;
 
     private boolean estado;
+    private String clave;
 
-    public ProveedoresDTO(int idProveedor, String tipo, String nombre, String usuario, boolean estado) {
+    public ProveedoresDTO(int idProveedor, String tipo, String nombre, String usuario, boolean estado, String clave) {
         this.idProveedor = idProveedor;
         this.tipo = tipo;
         this.nombre = nombre;
         this.usuario = usuario;
         this.estado = estado;
+        this.clave = clave;
     }
 
     public int getIdProveedor() {

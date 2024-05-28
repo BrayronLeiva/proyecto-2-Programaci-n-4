@@ -14,7 +14,7 @@ public class DTOService {
         List<ProveedoresDTO> proveedpresDTO = new ArrayList<>();
         for (Proveedores current : list) {
             proveedpresDTO.add(new ProveedoresDTO(current.getIdProveedor(), current.getTipo(), current.getNombre(),
-                    current.getUsuario(), current.isEstado()));
+                    current.getUsuario(), current.isEstado(),current.getClave()));
         }
 
         return proveedpresDTO;
@@ -23,7 +23,7 @@ public class DTOService {
     public ProveedoresDTO transformarDTOProveedore(Proveedores obj){
 
         return new ProveedoresDTO(obj.getIdProveedor(), obj.getTipo(), obj.getNombre(),
-                    obj.getUsuario(), obj.isEstado());
+                    obj.getUsuario(), obj.isEstado(), obj.getClave());
 
     }
 
